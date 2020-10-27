@@ -1,23 +1,19 @@
-import { ErrorsInterceptor } from './common/errors.interceptor';
 import { UserModule } from './modules/user/user.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Connection } from 'typeorm';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { ConfigModule } from './config/config.module';
+import { ConfigService } from './config/config.service';
+import { TypeOrmConfigService } from './typeOrm.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'blogUser',
-      password: 'Blog112611',
-      database: 'blog',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useClass: TypeOrmConfigService,
     }),
     UserModule,
   ],
