@@ -1,3 +1,4 @@
+import { SharedModule } from './shared/shared.module';
 import { UserModule } from './modules/user/user.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -16,6 +17,7 @@ import { TypeOrmConfigService } from './typeOrm.service';
       useClass: TypeOrmConfigService,
     }),
     UserModule,
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [

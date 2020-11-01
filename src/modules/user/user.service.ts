@@ -16,7 +16,12 @@ export class UserService {
       select: ['mobile', 'id', 'email', 'name', 'createTime'],
       where: query,
     });
-    return { code: 200, msg: '获取成功', data: data[0] };
+    console.log(data);
+    if (data.length > 0) {
+      return { code: 200, msg: '获取成功', data: data[0] };
+    } else {
+      return { code: 500, msg: '未查询到此id对应的用户' };
+    }
   }
   async findAll(): Promise<Result> {
     let data = await this.UserRepository.find();

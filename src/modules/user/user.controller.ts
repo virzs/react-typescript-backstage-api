@@ -1,12 +1,15 @@
-import { User } from './user.entity';
+import { DefaultDTOValidationPipe } from './../../shared/DefaultDTOValidationPipe';
+import { RegisterDTO } from './dto/register.dto';
 import { UserService } from './user.service';
-import { Body, Controller, Get, Post, Query, Response } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+import { DetailDTO } from './dto/detail.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly UserService: UserService) {}
   @Get()
-  byId(@Query() query) {
+  @UsePipes(DefaultDTOValidationPipe)
+  byId(@Query() query: DetailDTO) {
     return this.UserService.byId(query);
   }
   @Get('list')
@@ -14,7 +17,8 @@ export class UserController {
     return this.UserService.findAll();
   }
   @Post('register')
-  register(@Body() body) {
+  @UsePipes(DefaultDTOValidationPipe)
+  register(@Body() body: RegisterDTO) {
     return this.UserService.register(body);
   }
 }
