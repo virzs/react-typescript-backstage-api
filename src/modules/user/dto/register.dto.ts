@@ -5,14 +5,9 @@ import { IsEmail, IsString, Length } from 'class-validator';
 
 export class RegisterDTO {
   @IsString()
-  @Length(11, 11, {
-    message: '手机号必须为11位',
-  })
-  mobile: string;
-  @IsEmail()
-  email: string;
-  @IsString()
-  name: string;
+  username: string;
   @IsString()
   password: string;
+  @IsString()
+  repassword: string;
 }
