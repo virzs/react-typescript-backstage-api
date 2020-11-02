@@ -1,8 +1,17 @@
 import { DefaultDTOValidationPipe } from './../../shared/DefaultDTOValidationPipe';
 import { RegisterDTO } from './dto/register.dto';
 import { UserService } from './user.service';
-import { Body, Controller, Get, Post, Query, UsePipes } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  UseGuards,
+  UsePipes,
+} from '@nestjs/common';
 import { DetailDTO } from './dto/detail.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
@@ -12,6 +21,7 @@ export class UserController {
   byId(@Query() query: DetailDTO) {
     return this.UserService.byId(query);
   }
+  @UseGuards(AuthGuard('jwt'))
   @Get('list')
   findAll(): Promise<{}> {
     return this.UserService.findAll();

@@ -8,6 +8,8 @@ import { Connection } from 'typeorm';
 import { ConfigModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { TypeOrmConfigService } from './typeOrm.service';
+import { AuthService } from './modules/auth/auth.service';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { TypeOrmConfigService } from './typeOrm.service';
     }),
     UserModule,
     SharedModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [
