@@ -49,7 +49,6 @@ export class UserService {
     const hashPassword = encryptPassword(body.password, salt);
     body.password = hashPassword;
     body.salt = salt;
-    body.createTime = new Date();
     const res = await this.UserRepository.insert(body);
     if (res) {
       return { code: 200, msg: '注册成功' };
