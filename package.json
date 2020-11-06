@@ -32,6 +32,8 @@
     "class-validator": "^0.12.2",
     "dotenv": "^8.2.0",
     "jsonwebtoken": "^8.5.1",
+    "log4js": "^6.3.0",
+    "moment": "^2.29.1",
     "mysql": "^2.18.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
@@ -39,6 +41,7 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
+    "stacktrace-js": "^2.0.2",
     "swagger-ui-express": "^4.1.4",
     "typeorm": "^0.2.28"
   },
