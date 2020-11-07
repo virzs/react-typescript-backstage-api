@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { DefaultDTOValidationPipe } from './DefaultDTOValidationPipe';
+import { DefaultDTOValidationPipe } from '../common/pipes/DefaultDTOValidationPipe';
 @Module({
   providers: [DefaultDTOValidationPipe],
 })

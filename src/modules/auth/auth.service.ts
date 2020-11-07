@@ -1,7 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  BadRequestException,
+  Injectable,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Result } from 'src/common/result.interface';
+import { Result } from 'src/common/interface/result.interface';
 import { encryptPassword } from 'src/utils/cryptogram';
 import { Repository } from 'typeorm';
 import { User } from '../user/user.entity';
@@ -26,15 +30,12 @@ export class AuthService {
     const user = await this.UserRepository.findOne({
       where: { username: body.username },
     });
-    if (!user) {
-      return { code: 500, msg: '当前用户不存在' };
-    }
+    if (!user) throw new BadRequestException('当前用户不存在');
     const hashedPassword = user.password;
     const salt = user.salt;
     const hashPassword = encryptPassword(body.password, salt);
-    if (hashedPassword !== hashPassword) {
-      return { code: 500, msg: '密码错误' };
-    }
+    if (hashedPassword !== hashPassword)
+      throw new BadGatewayException('密码错误');
     const payload = { username: body.username, id: user.id };
     return {
       code: 200,

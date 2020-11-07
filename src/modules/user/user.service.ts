@@ -1,4 +1,4 @@
-import { Result } from '../../common/result.interface';
+import { Result } from '../../common/interface/result.interface';
 import { User } from './user.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';

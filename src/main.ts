@@ -4,8 +4,8 @@ import { ConfigService } from './config/config.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { logger } from './common/middleware/logger.middleware';
 import * as express from 'express';
-import { TransformInterceptor } from './common/transform/transform.interceptor';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { TransformInterceptor } from './common/interceptor/transform.interceptor';
+import { HttpExceptionFilter } from './common/filters/http-exception.fillter';
 import { AllExceptionsFilter } from './common/filters/any-exception.fillter';
 
 async function bootstrap() {

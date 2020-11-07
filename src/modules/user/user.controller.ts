@@ -1,4 +1,4 @@
-import { DefaultDTOValidationPipe } from './../../shared/DefaultDTOValidationPipe';
+import { DefaultDTOValidationPipe } from '../../common/pipes/DefaultDTOValidationPipe';
 import { RegisterDTO } from './dto/register.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { UserService } from './user.service';
