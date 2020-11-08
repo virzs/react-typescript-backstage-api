@@ -5,8 +5,10 @@ import {
   Post,
   Request,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { DefaultDTOValidationPipe } from 'src/common/pipes/DefaultDTOValidationPipe';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
 
@@ -15,8 +17,9 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   // 登录测试
-  @UseGuards(AuthGuard('local'))
   @Post('login')
+  // @UseGuards(AuthGuard('local'))
+  @UsePipes(DefaultDTOValidationPipe)
   async login(@Body() body: LoginDTO) {
     return this.authService.login(body);
   }

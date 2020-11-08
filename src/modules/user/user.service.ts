@@ -21,8 +21,8 @@ export class UserService {
       throw new BadRequestException('未查询到此id对应的用户');
     }
   }
-  async findOne(username): Promise<any> {
-    const data = await this.UserRepository.findOne({ where: { username } });
+  async findOne(account): Promise<any> {
+    const data = await this.UserRepository.findOne({ where: { account } });
     return { code: 200, msg: '查询成功', data };
   }
   async getPage(body): Promise<Result> {

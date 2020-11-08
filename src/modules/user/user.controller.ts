@@ -38,7 +38,7 @@ export class UserController {
   getPage(@Body() body: PageDTO): Promise<Result> {
     return this.UserService.getPage(body);
   }
-  
+
   @Post('register')
   @UsePipes(DefaultDTOValidationPipe)
   @ApiBody({

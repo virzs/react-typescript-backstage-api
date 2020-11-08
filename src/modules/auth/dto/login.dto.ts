@@ -1,8 +1,11 @@
-import { IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class LoginDTO {
   @IsString()
-  username: string;
+  @IsNotEmpty({ message: '账号不能为空' })
+  account: string;
+
   @IsString()
+  @IsNotEmpty({ message: '密码不能为空' })
   password: string;
 }
