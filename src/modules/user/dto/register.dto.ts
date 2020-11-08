@@ -10,6 +10,11 @@ export class RegisterDTO {
   @IsNotEmpty({ message: '用户名不能为空' })
   readonly username: string;
 
+  @ApiProperty({ example: 'name1', description: '账号' })
+  @IsString({ message: '账号必须为string类型' })
+  @IsNotEmpty({ message: '账号不能为空' })
+  readonly account: string;
+
   @ApiProperty({ example: '12345678', description: '密码' })
   @IsString({ message: '密码必须为string类型' })
   @IsNotEmpty({ message: '密码不能为空' })

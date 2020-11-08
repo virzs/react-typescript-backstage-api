@@ -8,7 +8,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Result } from 'src/common/interface/result.interface';
 import { encryptPassword } from 'src/utils/cryptogram';
 import { Repository } from 'typeorm';
-import { User } from '../user/user.entity';
+import { User } from '../user/entities/user.entity';
 @Injectable()
 export class AuthService {
   constructor(

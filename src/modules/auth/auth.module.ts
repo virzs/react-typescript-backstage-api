@@ -8,7 +8,7 @@ import { LocalStrategy } from './local.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import { jwtConstants } from './constants';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from '../user/user.entity';
+import { User } from '../user/entities/user.entity';
 
 @Module({
   imports: [

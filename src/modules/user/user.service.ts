@@ -1,5 +1,5 @@
 import { Result } from '../../common/interface/result.interface';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -20,18 +20,6 @@ export class UserService {
     } else {
       throw new BadRequestException('未查询到此id对应的用户');
     }
-  }
-  async getList(): Promise<Result> {
-    const data = await this.UserRepository.find();
-    let result = [];
-    if (data.length > 0) {
-      result = data.map(i => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { password, salt, ...meta } = i; //处理原始数据，返回排除项以外的数据
-        return meta;
-      });
-    }
-    return { code: 200, msg: '查询成功', data: result };
   }
   async findOne(username): Promise<any> {
     const data = await this.UserRepository.findOne({ where: { username } });
@@ -64,10 +52,13 @@ export class UserService {
   }
   async register(body): Promise<Result> {
     const find = await this.UserRepository.findOne({
-      where: { username: body.username },
+      where: [{ username: body.username }, { account: body.account }],
     });
     if (find) {
-      throw new BadRequestException('当前用户名已注册');
+      if (find.account === body.account)
+        throw new BadRequestException('当前账号已注册');
+      if (find.username === body.username)
+        throw new BadRequestException('当前用户名已被使用');
     }
     if (body.password !== body.repassword) {
       throw new BadRequestException('两次输入的密码不一致');

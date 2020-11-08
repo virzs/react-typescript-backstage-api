@@ -31,17 +31,14 @@ export class UserController {
   getDetail(@Query() query: DetailDTO) {
     return this.UserService.getDetail(query);
   }
-  @UseGuards(AuthGuard('jwt'))
-  @Get('list')
-  getList(): Promise<any> {
-    return this.UserService.getList();
-  }
+
   @Post('page')
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(DefaultDTOValidationPipe)
   getPage(@Body() body: PageDTO): Promise<Result> {
     return this.UserService.getPage(body);
   }
+  
   @Post('register')
   @UsePipes(DefaultDTOValidationPipe)
   @ApiBody({
