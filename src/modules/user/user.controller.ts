@@ -1,3 +1,4 @@
+import { Result } from '../../common/interface/result.interface';
 import { DefaultDTOValidationPipe } from '../../common/pipes/DefaultDTOValidationPipe';
 import { RegisterDTO } from './dto/register.dto';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -15,6 +16,7 @@ import { DetailDTO } from './dto/detail.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiTags, ApiQuery, ApiBody, ApiResponse } from '@nestjs/swagger';
 import { resRegister } from './classes/register';
+import { PageDTO } from './dto/page.dto';
 
 @ApiTags('用户')
 @Controller('user')
@@ -26,13 +28,19 @@ export class UserController {
     name: 'id',
     description: '传入用户id',
   })
-  byId(@Query() query: DetailDTO) {
-    return this.UserService.byId(query);
+  getDetail(@Query() query: DetailDTO) {
+    return this.UserService.getDetail(query);
   }
   @UseGuards(AuthGuard('jwt'))
   @Get('list')
-  findAll(): Promise<any> {
-    return this.UserService.findAll();
+  getList(): Promise<any> {
+    return this.UserService.getList();
+  }
+  @Post('page')
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(DefaultDTOValidationPipe)
+  getPage(@Body() body: PageDTO): Promise<Result> {
+    return this.UserService.getPage(body);
   }
   @Post('register')
   @UsePipes(DefaultDTOValidationPipe)

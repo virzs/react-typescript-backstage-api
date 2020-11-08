@@ -11,25 +11,56 @@ export class UserService {
     @InjectRepository(User)
     private readonly UserRepository: Repository<User>,
   ) {}
-  async byId(query): Promise<Result> {
-    const data = await this.UserRepository.find({
-      select: ['mobile', 'id', 'email', 'username', 'createTime'],
-      where: query,
-    });
-    console.log(data);
-    if (data.length > 0) {
-      return { code: 200, msg: '获取成功', data: data[0] };
+  async getDetail(query): Promise<Result> {
+    const data = await this.UserRepository.findOne({ where: query });
+    if (data) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, salt, ...meta } = data;
+      return { code: 200, msg: '获取成功', data: meta };
     } else {
       throw new BadRequestException('未查询到此id对应的用户');
     }
   }
-  async findAll(): Promise<Result> {
+  async getList(): Promise<Result> {
     const data = await this.UserRepository.find();
-    return { code: 200, msg: '查询成功', data };
+    let result = [];
+    if (data.length > 0) {
+      result = data.map(i => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, salt, ...meta } = i; //处理原始数据，返回排除项以外的数据
+        return meta;
+      });
+    }
+    return { code: 200, msg: '查询成功', data: result };
   }
   async findOne(username): Promise<any> {
     const data = await this.UserRepository.findOne({ where: { username } });
     return { code: 200, msg: '查询成功', data };
+  }
+  async getPage(body): Promise<Result> {
+    const { page, pageSize, ...params } = body;
+    const users = await this.UserRepository.createQueryBuilder('user')
+      .where(params)
+      .skip((page - 1) * pageSize)
+      .take(pageSize) // 取pageSize筆數
+      .getManyAndCount(); //返回总数
+
+    let pageList = [];
+    let data = {};
+    if (users.length > 0) {
+      pageList = users[0].map(i => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, salt, ...meta } = i; //处理原始数据，返回排除项以外的数据
+        return meta;
+      });
+      data = {
+        records: pageList,
+        total: users[1],
+        page: body.page,
+        pageSize: body.pageSize,
+      };
+    }
+    return { code: 200, msg: 'textPage', data };
   }
   async register(body): Promise<Result> {
     const find = await this.UserRepository.findOne({

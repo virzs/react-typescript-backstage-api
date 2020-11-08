@@ -17,9 +17,11 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async validateUser(username: string, password: string): Promise<any> {
     const user = await this.UserRepository.findOne({ where: { username } });
     if (user && user.password) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { password, ...result } = user;
       return result;
     }
@@ -41,7 +43,7 @@ export class AuthService {
       code: 200,
       msg: '登陆成功',
       data: {
-        token: this.jwtService.sign(payload),
+        assets_token: this.jwtService.sign(payload),
       },
     };
   }
