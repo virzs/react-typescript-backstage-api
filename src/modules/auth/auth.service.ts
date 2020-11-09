@@ -1,8 +1,4 @@
-import {
-  BadGatewayException,
-  BadRequestException,
-  Injectable,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Result } from 'src/common/interface/result.interface';
@@ -17,16 +13,29 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // 本地策略验证用户
   async validateUser(account: string, password: string): Promise<any> {
-    const user = await this.UserRepository.findOne({ where: { account } });
-    if (user && user.password) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user;
-      return result;
+    const user = await this.UserRepository.createQueryBuilder('user')
+      .where({
+        account,
+      })
+      .addSelect(['user.password', 'user.salt'])
+      .getOne();
+    if (user) {
+      const hashedPassword = user.password;
+      const userSalt = user.salt;
+      const hashPassword = encryptPassword(password, userSalt);
+      if (hashedPassword !== hashPassword)
+        throw new BadRequestException('密码错误');
+      return user;
     }
-    console.log(user);
-    return null;
+    throw new BadRequestException('用户不存在');
+  }
+
+  async findUser(id) {
+    const user = this.UserRepository.findByIds(id);
+    if (user) return user;
+    throw new BadRequestException('用户不存在');
   }
 
   async register(body): Promise<Result> {
@@ -54,19 +63,8 @@ export class AuthService {
     }
   }
 
-  async login(body: any): Promise<Result> {
-    const user = await this.UserRepository.createQueryBuilder('user')
-      .where({
-        account: body.account,
-      })
-      .addSelect(['user.password', 'user.salt'])
-      .getOne();
-    if (!user) throw new BadRequestException('当前用户不存在');
-    const hashedPassword = user.password;
-    const userSalt = user.salt;
-    const hashPassword = encryptPassword(body.password, userSalt);
-    if (hashedPassword !== hashPassword)
-      throw new BadGatewayException('密码错误');
+  async login(body: any, req: any): Promise<Result> {
+    const user = req.user;
     const payload = {
       account: body.account,
       id: user.id,
