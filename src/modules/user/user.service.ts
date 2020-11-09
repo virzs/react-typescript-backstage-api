@@ -1,6 +1,6 @@
 import { Result } from '../../common/interface/result.interface';
 import { User } from './entities/user.entity';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -10,15 +10,8 @@ export class UserService {
     @InjectRepository(User)
     private readonly UserRepository: Repository<User>,
   ) {}
-  async getDetail(query): Promise<Result> {
-    const data = await this.UserRepository.findOne({ where: query });
-    if (data) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, salt, ...meta } = data;
-      return { code: 200, msg: '获取成功', data: meta };
-    } else {
-      throw new BadRequestException('未查询到此id对应的用户');
-    }
+  async getDetail(req): Promise<Result> {
+    return { code: 200, msg: '获取成功', data: req.user };
   }
   async findOne(account): Promise<any> {
     const data = await this.UserRepository.findOne({ where: { account } });

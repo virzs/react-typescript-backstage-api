@@ -7,13 +7,12 @@ import {
   Controller,
   Get,
   Post,
-  Query,
+  Req,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { DetailDTO } from './dto/detail.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiTags, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageDTO } from './dto/page.dto';
 
 @ApiTags('用户')
@@ -21,16 +20,17 @@ import { PageDTO } from './dto/page.dto';
 export class UserController {
   constructor(private readonly UserService: UserService) {}
   @Get()
+  @ApiOperation({ summary: '获取当前登录用户数据' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   @UsePipes(DefaultDTOValidationPipe)
-  @ApiQuery({
-    name: 'id',
-    description: '传入用户id',
-  })
-  getDetail(@Query() query: DetailDTO) {
-    return this.UserService.getDetail(query);
+  getDetail(@Req() req) {
+    return this.UserService.getDetail(req);
   }
 
   @Post('page')
+  @ApiOperation({ summary: '获取用户分页' })
+  @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(DefaultDTOValidationPipe)
   getPage(@Body() body: PageDTO): Promise<Result> {
