@@ -6,7 +6,7 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Result } from 'src/common/interface/result.interface';
-import { encryptPassword } from 'src/utils/cryptogram';
+import { encryptPassword, makeSalt } from 'src/utils/cryptogram';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
 @Injectable()
@@ -27,6 +27,31 @@ export class AuthService {
     }
     console.log(user);
     return null;
+  }
+
+  async register(body): Promise<Result> {
+    const find = await this.UserRepository.findOne({
+      where: [{ username: body.username }, { account: body.account }],
+    });
+    if (find) {
+      if (find.account === body.account)
+        throw new BadRequestException('当前账号已注册');
+      if (find.username === body.username)
+        throw new BadRequestException('当前用户名已被使用');
+    }
+    if (body.password !== body.repassword) {
+      throw new BadRequestException('两次输入的密码不一致');
+    }
+    const salt = makeSalt();
+    const hashPassword = encryptPassword(body.password, salt);
+    body.password = hashPassword;
+    body.salt = salt;
+    const res = await this.UserRepository.insert(body);
+    if (res) {
+      return { code: 200, msg: '注册成功' };
+    } else {
+      return { code: 500, msg: '出现错误' };
+    }
   }
 
   async login(body: any): Promise<Result> {
