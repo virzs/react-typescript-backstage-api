@@ -17,17 +17,18 @@ async function bootstrap() {
     .setTitle('个人主页API文档') //文档标题
     .setDescription('个人主页API文档') //文档介绍
     .setVersion('1.0') //文档版本
-    .addBearerAuth()
+    .addServer('/api') //配置服务，默认路径api
+    .addBearerAuth() //设置token
     .build();
   // 为了创建完整的文档（具有定义的HTTP路由），我们使用类的createDocument()方法SwaggerModule。此方法带有两个参数，分别是应用程序实例和基本Swagger选项。
   const document = SwaggerModule.createDocument(app, swaggerOptions);
   // 最后一步是setup()。它依次接受（1）装入Swagger的路径，（2）应用程序实例, （3）描述Nest应用程序的文档。
-  SwaggerModule.setup('doc', app, document);
-  app.setGlobalPrefix('api');
+  SwaggerModule.setup('api/doc', app, document);
+  app.setGlobalPrefix('api'); //全局路径
   app.use(express.json()); // For parsing application/json
   app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
   // 监听所有的请求路由，并打印日志
-  app.use(logger);
+  app.use(logger); //使用日志
   app.useGlobalInterceptors(new TransformInterceptor()); //全局拦截器
   app.useGlobalFilters(new AllExceptionsFilter()); //过滤其他类型异常
   app.useGlobalFilters(new HttpExceptionFilter()); // 过滤处理 HTTP 异常
