@@ -5,16 +5,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Connection } from 'typeorm';
-import { ConfigModule } from './config/config.module';
-import { ConfigService } from './config/config.service';
+import { EnvConfigModule } from './config/env/env.config.module';
+import { EnvConfigService } from './config/env/env.config.service';
 import { TypeOrmConfigService } from './typeOrm.service';
 import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
+      imports: [EnvConfigModule],
+      inject: [EnvConfigService],
       useClass: TypeOrmConfigService,
     }),
     UserModule,
