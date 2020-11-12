@@ -1,16 +1,13 @@
 import {
   Body,
   Controller,
-  Get,
   Post,
   Req,
-  Request,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import {
-  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiResponse,
@@ -51,12 +48,5 @@ export class AuthController {
   async login(@Body() body: LoginDTO, @Req() req) {
     //req为local验证后返回的用户信息
     return this.authService.login(body, req);
-  }
-  @Get('me')
-  // 测试登录后才可访问的接口，在需要的地方使用守卫，可保证必须携带token才能访问
-  @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth()
-  getProfile(@Request() req) {
-    return req.user;
   }
 }
