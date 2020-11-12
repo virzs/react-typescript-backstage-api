@@ -7,6 +7,7 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   Req,
   UseGuards,
   UsePipes,
@@ -20,11 +21,19 @@ import { PageDTO } from './dto/page.dto';
 export class UserController {
   constructor(private readonly UserService: UserService) {}
   @Get()
-  @ApiOperation({ summary: '获取当前登录用户数据' })
+  @ApiOperation({ summary: '根据id获取用户信息' })
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(DefaultDTOValidationPipe)
-  getDetail(@Req() req) {
+  getDetail(@Query() query: any) {
+    return this.UserService.getDetailById(query);
+  }
+
+  @Get('me')
+  @ApiOperation({ summary: '获取当前登录用户数据' })
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
+  getProfile(@Req() req) {
     return this.UserService.getDetail(req);
   }
 

@@ -1,6 +1,6 @@
 import { Result } from '../../common/interface/result.interface';
 import { User } from './entities/user.entity';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -12,6 +12,11 @@ export class UserService {
   ) {}
   async getDetail(req): Promise<Result> {
     return { code: 200, msg: '获取成功', data: req.user };
+  }
+  async getDetailById(query): Promise<Result> {
+    const data = await this.UserRepository.findOne({ where: { id: query.id } });
+    if (!data) throw new BadRequestException('没有该用户');
+    return { code: 200, msg: '获取成功', data };
   }
   async findOne(account): Promise<any> {
     const data = await this.UserRepository.findOne({ where: { account } });
