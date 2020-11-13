@@ -5,12 +5,14 @@ import { Result } from 'src/common/interface/result.interface';
 import { encryptPassword, makeSalt } from 'src/utils/cryptogram';
 import { Repository } from 'typeorm';
 import { User } from '../user/entities/user.entity';
+import { UserService } from '../user/user.service';
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly UserRepository: Repository<User>,
     private readonly jwtService: JwtService,
+    private readonly userService: UserService,
   ) {}
 
   // 本地策略验证用户
@@ -33,7 +35,7 @@ export class AuthService {
   }
 
   async findUser(id) {
-    const user = this.UserRepository.findByIds(id);
+    const user = this.userService.getDetailById(id);
     if (user) return user;
     throw new BadRequestException('用户不存在');
   }
