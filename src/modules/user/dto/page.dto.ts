@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 export class PageDTO {
   @ApiProperty({ example: 1, description: '当前页' })
   @IsNumber()
@@ -12,6 +12,10 @@ export class PageDTO {
   readonly pageSize: number;
 
   @ApiProperty({ example: 0, default: '', description: '用户类型' })
-  @IsNumber()
+  @IsNumber(
+    { allowNaN: false },
+    { message: 'type必须为数字类型', always: false },
+  )
+  @IsOptional() //可选值
   readonly type: number;
 }

@@ -1,28 +1,18 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Result } from 'src/common/interface/result.interface';
 import { encryptPassword, makeSalt } from 'src/utils/cryptogram';
-import { Repository } from 'typeorm';
-import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private readonly UserRepository: Repository<User>,
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
   ) {}
 
   // 本地策略验证用户
   async validateUser(account: string, password: string): Promise<any> {
-    const user = await this.UserRepository.createQueryBuilder('user')
-      .where({
-        account,
-      })
-      .addSelect(['user.password', 'user.salt'])
-      .getOne();
+    const user = await this.userService.validateUserByAccount(account);
     if (user) {
       const hashedPassword = user.password;
       const userSalt = user.salt;
@@ -34,16 +24,18 @@ export class AuthService {
     throw new BadRequestException('用户不存在');
   }
 
-  async findUser(id) {
-    const user = this.userService.getDetailById(id);
+  async findUser(account) {
+    const user = await this.userService.validateUserByAccount(account);
+    console.error(user, 'xxxxxxxxxxxx');
     if (user) return user;
     throw new BadRequestException('用户不存在');
   }
 
   async register(body): Promise<Result> {
-    const find = await this.UserRepository.findOne({
-      where: [{ username: body.username }, { account: body.account }],
-    });
+    const find = await this.userService.validateUserByUserNameAndAccount(
+      body.username,
+      body.account,
+    );
     if (find) {
       if (find.account === body.account)
         throw new BadRequestException('当前账号已注册');
@@ -57,11 +49,11 @@ export class AuthService {
     const hashPassword = encryptPassword(body.password, salt);
     body.password = hashPassword;
     body.salt = salt;
-    const res = await this.UserRepository.insert(body);
+    const res = await this.userService.addUser(body);
     if (res) {
       return { code: 200, msg: '注册成功' };
     } else {
-      return { code: 500, msg: '出现错误' };
+      return { code: 500, msg: '出现错误', data: res };
     }
   }
 

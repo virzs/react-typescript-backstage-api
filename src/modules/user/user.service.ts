@@ -10,9 +10,41 @@ export class UserService {
     @InjectRepository(User)
     private readonly UserRepository: Repository<User>,
   ) {}
+  /**
+   * 依据账号验证用户
+   * @params(account)账号
+   */
+  async validateUserByAccount(account: string): Promise<User> {
+    return await this.UserRepository.createQueryBuilder('user')
+      .where({
+        account,
+      })
+      .addSelect(['user.password', 'user.salt'])
+      .getOne();
+  }
+
+  /**
+   * 依据用户名和账号验证用户
+   */
+  async validateUserByUserNameAndAccount(
+    username: string,
+    account: string,
+  ): Promise<User> {
+    return await this.UserRepository.findOne({
+      where: [{ username }, { account }],
+    });
+  }
+
+  /**
+   * 获取用户详情
+   */
   async getDetail(req): Promise<Result> {
     return { code: 200, msg: '获取成功', data: req.user };
   }
+
+  /**
+   * 根据id获取用户详情
+   */
   async getDetailById(query): Promise<Result> {
     const data = await this.UserRepository.findOne({ where: { id: query.id } });
     if (!data) throw new BadRequestException('没有该用户');
@@ -22,6 +54,15 @@ export class UserService {
     const data = await this.UserRepository.findOne({ where: { account } });
     return { code: 200, msg: '查询成功', data };
   }
+  /**
+   * 添加用户
+   */
+  async addUser(body): Promise<any> {
+    return await this.UserRepository.insert(body);
+  }
+  /**
+   * 获取用户分页
+   */
   async getPage(body): Promise<Result> {
     const { page, pageSize, ...params } = body;
     const users = await this.UserRepository.createQueryBuilder('user')
