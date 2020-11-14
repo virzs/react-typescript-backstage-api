@@ -10,10 +10,20 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: number;
 
-  @Column({ type: 'varchar', length: 20, comment: '账号，用于登录' })
+  @Column({
+    type: 'varchar',
+    length: 20,
+    comment: '账号，用于登录',
+    unique: true, //不可重复
+  })
   account: string;
 
-  @Column({ type: 'varchar', length: 20, comment: '用户名，用于展示' })
+  @Column({
+    type: 'varchar',
+    length: 20,
+    comment: '用户名，用于展示',
+    unique: true,
+  })
   username: string;
 
   @Column({
@@ -21,13 +31,19 @@ export class User {
     length: 11,
     nullable: true,
     comment: '用户手机号',
+    unique: true,
   })
   mobile: string;
 
   @Column({ type: 'varchar', comment: '用户密码', select: false })
   password: string;
 
-  @Column({ type: 'varchar', nullable: true, comment: '用户邮箱' })
+  @Column({
+    type: 'varchar',
+    nullable: true,
+    comment: '用户邮箱',
+    unique: true,
+  })
   email: string;
 
   @Column({ type: 'varchar', comment: '加密盐', select: false })
