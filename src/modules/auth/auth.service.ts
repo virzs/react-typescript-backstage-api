@@ -18,10 +18,10 @@ export class AuthService {
       const userSalt = user.salt;
       const hashPassword = encryptPassword(password, userSalt);
       if (hashedPassword !== hashPassword)
-        throw new BadRequestException('密码错误');
+        throw new BadRequestException('账号或密码错误');
       return user;
     }
-    throw new BadRequestException('用户不存在');
+    throw new BadRequestException('账号或密码错误');
   }
 
   async findUser(account) {
