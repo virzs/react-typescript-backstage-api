@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Result } from 'src/common/interface/result.interface';
 import { encryptPassword, makeSalt } from 'src/utils/cryptogram';
@@ -8,6 +9,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
+    private readonly configService: ConfigService,
   ) {}
 
   // 本地策略验证用户
@@ -26,7 +28,6 @@ export class AuthService {
 
   async findUser(account) {
     const user = await this.userService.validateUserByAccount(account);
-    console.error(user, 'xxxxxxxxxxxx');
     if (user) return user;
     throw new BadRequestException('用户不存在');
   }
@@ -56,7 +57,9 @@ export class AuthService {
       return { code: 500, msg: '出现错误', data: res };
     }
   }
-
+  /**
+   * 登录方法
+   */
   async login(body: any, req: any): Promise<Result> {
     const user = req.user;
     const payload = {
@@ -71,9 +74,99 @@ export class AuthService {
       code: 200,
       msg: '登陆成功',
       data: {
-        assets_token: this.jwtService.sign(payload),
+        assets_token: await this.getAccessToken(payload),
         ...result,
       },
     };
+  }
+
+  /**
+   * 生成accessToken
+   */
+  async getAccessToken(payload) {
+    const token = this.jwtService.signAsync(payload, {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get(
+        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      )}s`,
+    });
+    return token;
+  }
+
+  /**
+   * 生成refreshToken
+   *
+   */
+  async getRefreshToken(payload) {
+    const token = this.jwtService.signAsync(payload, {
+      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: `${this.configService.get(
+        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+      )}s`,
+    });
+    return token;
+  }
+  /**
+   *
+   * 刷新token
+   */
+  async refreshAccessToken(request) {
+    const user = request.user;
+    const payload = {
+      account: user.account,
+      id: user.id,
+      type: user.type,
+      state: user.state,
+    };
+    const accessTokenCookie = await this.getAccessToken(payload);
+    request.res.setHeader('Set-Cookie', accessTokenCookie);
+    return { code: 200, msg: '刷新成功' };
+  }
+
+  /**
+   * cookie方式生成token
+   */
+  async loginWithCookies(body: any, req: any, res: any) {
+    const user = req.user;
+    const payload = {
+      account: body.account,
+      id: user.id,
+      type: user.type,
+      state: user.state,
+    };
+    const accessToken = await this.getAccessToken(payload);
+    const refreshToken = await this.getRefreshToken(payload);
+    const accessCookie = `Authentication=${accessToken}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+    )}`;
+    const refreshCookie = `Refresh=${refreshToken}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+    )}`;
+    await this.userService.updateOrSetRefreshTokenById(
+      payload.id,
+      refreshToken,
+    );
+    res.setHeader('Set-Cookie', [accessCookie, refreshCookie]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, salt, ...result } = user;
+    return res.send({
+      code: 200,
+      msg: '登陆成功',
+      data: {
+        ...result,
+      },
+    });
+  }
+
+  async getCookieForLoginOut(req: any, res: any) {
+    //TODO token未清除
+    const accessCookie = `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+    const refreshCookie = `'Refresh=; HttpOnly; Path=/; Max-Age=0'`;
+    await this.userService.removeRefreshToken(req.user.id);
+    res.setHeader('Set-Cookie', [accessCookie, refreshCookie]);
+    return res.send({
+      code: 200,
+      msg: '注销成功',
+    });
   }
 }

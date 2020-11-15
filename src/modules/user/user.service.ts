@@ -3,6 +3,7 @@ import { User } from './entities/user.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -33,6 +34,36 @@ export class UserService {
     return await this.UserRepository.findOne({
       where: [{ username }, { account }],
     });
+  }
+  /**
+   * 更新refrestoken
+   * @param req
+   */
+  async updateOrSetRefreshTokenById(id: string, refreshToken: string) {
+    const hashedToken = await bcrypt.hash(refreshToken, 10); //加密refreshToken
+    await this.UserRepository.update(id, { refreshToken: hashedToken });
+  }
+  /**
+   * 删除数据库中存放的refresh Token
+   *
+   */
+  async removeRefreshToken(id: string) {
+    return this.UserRepository.update(id, {
+      refreshToken: null,
+    });
+  }
+
+  /**
+   * 匹配token
+   * @param req
+   */
+  async getUserWhereRefreshTokenMatches(id: string, refreshToken: string) {
+    const user = await this.UserRepository.createQueryBuilder('user')
+      .where({ id })
+      .addSelect(['user.refreshToken'])
+      .getOne();
+    const isMatches = await bcrypt.compare(refreshToken, user.refreshToken);
+    if (isMatches) return user;
   }
 
   /**

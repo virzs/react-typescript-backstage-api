@@ -1,16 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { EnvConfigService } from './config/env/env.config.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { logger } from './common/middleware/logger.middleware';
 import * as express from 'express';
 import { TransformInterceptor } from './common/interceptor/transform.interceptor';
 import { HttpExceptionFilter } from './common/filters/http-exception.fillter';
 import { AllExceptionsFilter } from './common/filters/any-exception.fillter';
+import { ConfigService } from '@nestjs/config';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
-  const envConfigService = new EnvConfigService(`${process.env.NODE_ENV}.env`);
   const app = await NestFactory.create(AppModule);
+  const envConfigService = app.get(ConfigService);
   const swaggerOptions = new DocumentBuilder()
     // DocumentBuilder是一个辅助类，有助于结构的基本文件SwaggerModule。它包含几种方法，可用于设置诸如标题，描述，版本等属性。
     .setTitle(envConfigService.get('SWAGGER_UI_TITLE')) //文档标题
@@ -27,7 +28,8 @@ async function bootstrap() {
     app,
     document,
   );
-  app.setGlobalPrefix(envConfigService.get('APP_GLOBALPATH')); //全局路径
+  app.setGlobalPrefix(envConfigService.get('APP_GLOBAL_PATH')); //全局路径
+  app.use(cookieParser());
   app.use(express.json()); // For parsing application/json
   app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
   // 监听所有的请求路由，并打印日志

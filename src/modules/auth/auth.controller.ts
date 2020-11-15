@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Req,
+  Res,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
@@ -12,6 +14,8 @@ import { resRegister } from '../user/classes/register';
 import { RegisterDTO } from '../user/dto/register.dto';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
+import JwtAuthGuard from './guard/jwtAuth.guard';
+import JwtRefreshGuard from './guard/jwtRefresh.guard';
 import { LocalAuthGuard } from './guard/localAuth.guard';
 
 @ApiTags('授权')
@@ -40,8 +44,25 @@ export class AuthController {
   @ApiOperation({ summary: '用户登录' })
   @UseGuards(LocalAuthGuard)
   @UsePipes(DefaultDTOValidationPipe)
-  async login(@Body() body: LoginDTO, @Req() req) {
-    //req为local验证后返回的用户信息
-    return this.authService.login(body, req);
+  async login(@Body() body: LoginDTO, @Req() req, @Res() res) {
+    //req为local验证后返回的用户信息A
+    return this.authService.loginWithCookies(body, req, res);
+  }
+
+  /**
+   * 刷新token
+   *
+   */
+  @Get('refresh')
+  @UseGuards(JwtRefreshGuard)
+  async refresh(@Req() request) {
+    return await this.authService.refreshAccessToken(request);
+  }
+
+  @Post('loginout')
+  @ApiOperation({ summary: '注销登录' })
+  @UseGuards(JwtAuthGuard)
+  async loginout(@Req() req, @Res() res) {
+    return this.authService.getCookieForLoginOut(req, res);
   }
 }

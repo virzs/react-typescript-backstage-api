@@ -73,4 +73,12 @@ export class User {
 
   @CreateDateColumn()
   createTime: Date;
+
+  @Column({
+    type: 'varchar',
+    comment: 'refresh_token',
+    nullable: true,
+    select: false,
+  })
+  refreshToken: string;
 }

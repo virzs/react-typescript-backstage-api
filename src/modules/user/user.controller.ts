@@ -12,9 +12,9 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageDTO } from './dto/page.dto';
+import JwtAuthGuard from '../auth/guard/jwtAuth.guard';
 
 @ApiTags('用户')
 @Controller('user')
@@ -23,7 +23,7 @@ export class UserController {
   @Get()
   @ApiOperation({ summary: '根据id获取用户信息' })
   @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @UsePipes(DefaultDTOValidationPipe)
   getDetail(@Query() query: any) {
     return this.UserService.getDetailById(query);
@@ -31,7 +31,7 @@ export class UserController {
 
   @Get('me')
   @ApiOperation({ summary: '获取当前登录用户数据' })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   getProfile(@Req() req) {
     return this.UserService.getDetail(req);
@@ -40,7 +40,7 @@ export class UserController {
   @Post('page')
   @ApiOperation({ summary: '获取用户分页' })
   @ApiBearerAuth()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @UsePipes(DefaultDTOValidationPipe)
   getPage(@Body() body: PageDTO): Promise<Result> {
     return this.UserService.getPage(body);
