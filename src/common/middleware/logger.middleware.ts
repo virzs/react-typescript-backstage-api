@@ -31,6 +31,7 @@ export function logger(req: Request, res: Response, next: () => any) {
     Method: ${req.method}
     IP: ${req.ip}
     Status code: ${code}
+    Cookies: ${JSON.stringify(req.cookies)}
     Parmas: ${JSON.stringify(req.params)}
     Query: ${JSON.stringify(req.query)}
     Body: ${JSON.stringify(
