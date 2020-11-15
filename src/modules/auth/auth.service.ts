@@ -119,7 +119,10 @@ export class AuthService {
       state: user.state,
     };
     const accessTokenCookie = await this.getAccessToken(payload);
-    request.res.setHeader('Set-Cookie', accessTokenCookie);
+    const accessCookie = `Authentication=${accessTokenCookie}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+    )}`;
+    request.res.setHeader('Set-Cookie', accessCookie);
     return { code: 200, msg: '刷新成功' };
   }
 
@@ -159,9 +162,8 @@ export class AuthService {
   }
 
   async getCookieForLoginOut(req: any, res: any) {
-    //TODO token未清除
     const accessCookie = `Authentication=; HttpOnly; Path=/; Max-Age=0`;
-    const refreshCookie = `'Refresh=; HttpOnly; Path=/; Max-Age=0'`;
+    const refreshCookie = `Refresh=; HttpOnly; Path=/; Max-Age=0`;
     await this.userService.removeRefreshToken(req.user.id);
     res.setHeader('Set-Cookie', [accessCookie, refreshCookie]);
     return res.send({
