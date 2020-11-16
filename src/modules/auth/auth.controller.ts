@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DefaultDTOValidationPipe } from 'src/common/pipes/DefaultDTOValidationPipe';
-import { resRegister } from '../user/classes/register';
+import { resLogin, resRegister } from '../user/classes/response';
 import { RegisterDTO } from '../user/dto/register.dto';
 import { AuthService } from './auth.service';
 import { LoginDTO } from './dto/login.dto';
@@ -41,7 +41,15 @@ export class AuthController {
 
   // 登录测试
   @Post('login')
-  @ApiOperation({ summary: '用户登录' })
+  @ApiOperation({
+    summary: '用户登录',
+    description: '登陆后返回accessToken和refreshToken',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '登陆成功',
+    type: resLogin,
+  })
   @UseGuards(LocalAuthGuard)
   @UsePipes(DefaultDTOValidationPipe)
   async login(@Body() body: LoginDTO, @Req() req, @Res() res) {
@@ -54,6 +62,7 @@ export class AuthController {
    *
    */
   @Get('refresh')
+  @ApiOperation({ summary: '刷新token', description: '通过cookie获取token' })
   @UseGuards(JwtRefreshGuard)
   async refresh(@Req() request) {
     return await this.authService.refreshAccessToken(request);

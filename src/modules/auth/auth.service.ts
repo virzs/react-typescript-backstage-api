@@ -57,28 +57,6 @@ export class AuthService {
       return { code: 500, msg: '出现错误', data: res };
     }
   }
-  /**
-   * 登录方法
-   */
-  async login(body: any, req: any): Promise<Result> {
-    const user = req.user;
-    const payload = {
-      account: body.account,
-      id: user.id,
-      type: user.type,
-      state: user.state,
-    };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, salt, ...result } = user;
-    return {
-      code: 200,
-      msg: '登陆成功',
-      data: {
-        assets_token: await this.getAccessToken(payload),
-        ...result,
-      },
-    };
-  }
 
   /**
    * 生成accessToken
@@ -127,7 +105,7 @@ export class AuthService {
   }
 
   /**
-   * cookie方式生成token
+   * 登录
    */
   async loginWithCookies(body: any, req: any, res: any) {
     const user = req.user;
