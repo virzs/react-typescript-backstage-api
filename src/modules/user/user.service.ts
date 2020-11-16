@@ -70,7 +70,9 @@ export class UserService {
    * 获取用户详情
    */
   async getDetail(req): Promise<Result> {
-    return { code: 200, msg: '获取成功', data: req.user };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, salt, ...result } = req.user;
+    return { code: 200, msg: '获取成功', data: result };
   }
 
   /**
@@ -91,6 +93,19 @@ export class UserService {
   async addUser(body): Promise<any> {
     return await this.UserRepository.insert(body);
   }
+
+  /**
+   * 修改用户信息
+   * @param body
+   */
+  async updateInfo(body): Promise<Result> {
+    const { id, avatar, username } = body;
+    //TODO验证参数，用户名重复验证
+    const user = await this.UserRepository.update({ id }, { avatar, username });
+    if (!user) throw new BadRequestException('出现错误请稍后重试');
+    return { code: 200, msg: '更新成功' };
+  }
+
   /**
    * 获取用户分页
    */
