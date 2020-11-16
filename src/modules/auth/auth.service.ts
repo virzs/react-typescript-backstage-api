@@ -13,15 +13,17 @@ export class AuthService {
   ) {}
 
   // 本地策略验证用户
-  async validateUser(account: string, password: string): Promise<any> {
+  async validateUser(account: string, getPassword: string): Promise<any> {
     const user = await this.userService.validateUserByAccount(account);
     if (user) {
       const hashedPassword = user.password;
       const userSalt = user.salt;
-      const hashPassword = encryptPassword(password, userSalt);
+      const hashPassword = encryptPassword(getPassword, userSalt);
       if (hashedPassword !== hashPassword)
         throw new BadRequestException('账号或密码错误');
-      return user;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, salt, ...result } = user; //返回信息中删除敏感信息
+      return result;
     }
     throw new BadRequestException('账号或密码错误');
   }
