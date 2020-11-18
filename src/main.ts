@@ -8,6 +8,7 @@ import { HttpExceptionFilter } from './common/filters/http-exception.fillter';
 import { AllExceptionsFilter } from './common/filters/any-exception.fillter';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
+import { DefaultDTOValidationPipe } from './common/pipes/defaultDTOValidation.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -34,6 +35,7 @@ async function bootstrap() {
   app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
   // 监听所有的请求路由，并打印日志
   app.use(logger); //使用日志
+  app.useGlobalPipes(new DefaultDTOValidationPipe());
   app.useGlobalInterceptors(new TransformInterceptor()); //全局拦截器
   app.useGlobalFilters(new AllExceptionsFilter()); //过滤其他类型异常
   app.useGlobalFilters(new HttpExceptionFilter()); // 过滤处理 HTTP 异常
