@@ -4,7 +4,7 @@ import {
   Injectable,
   PipeTransform,
 } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
+import { classToPlain, plainToClass } from 'class-transformer';
 import { validate } from 'class-validator';
 import { Logger } from '../../utils/log4';
 
@@ -14,8 +14,13 @@ export class DefaultDTOValidationPipe implements PipeTransform<any> {
     if (!metatype || !this.toValidate(metatype)) {
       return value;
     }
-    const object = plainToClass(metatype, value);
+    const object = plainToClass(metatype, value, {
+      excludeExtraneousValues: true,
+    });
     const errors = await validate(object);
+    const deleteUndefined = await classToPlain(object)
+    //TODO 校验未通过的值后去除undifined数据
+    console.log(value, object, deleteUndefined);
     if (errors.length > 0) {
       console.log('error', Object.values(errors[0].constraints)[0]);
       const msg = Object.values(errors[0].constraints)[0]; // 只需要取第一个错误信息并返回即可
