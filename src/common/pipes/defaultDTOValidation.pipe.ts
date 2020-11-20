@@ -17,15 +17,15 @@ export class DefaultDTOValidationPipe implements PipeTransform<any> {
     const object = plainToClass(metatype, value, {
       excludeExtraneousValues: true,
     });
-    const errors = await validate(object);
+    //删除未验证的值及非实体中的值
     const deleteUndefined = await classToPlain(object);
-    //TODO 校验实体中不存在字段
     for (const i in deleteUndefined) {
       if (deleteUndefined[i] === undefined) {
         delete deleteUndefined[i];
       }
     }
-    console.log(value, object, deleteUndefined, errors);
+    const delObj = plainToClass(metatype, deleteUndefined);
+    const errors = await validate(delObj);
     if (errors.length > 0) {
       console.log('error', Object.values(errors[0].constraints)[0]);
       const msg = Object.values(errors[0].constraints)[0]; // 只需要取第一个错误信息并返回即可
