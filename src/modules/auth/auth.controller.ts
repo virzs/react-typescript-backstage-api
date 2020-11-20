@@ -9,7 +9,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { DefaultDTOValidationPipe } from 'src/common/pipes/DefaultDTOValidationPipe';
+import { DefaultDTOValidationPipe } from 'src/common/pipes/defaultDTOValidation.pipe';
 import { resLogin, resRegister } from '../user/classes/response';
 import { RegisterDTO } from '../user/dto/register.dto';
 import { AuthService } from './auth.service';

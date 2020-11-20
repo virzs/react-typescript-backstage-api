@@ -1,5 +1,4 @@
 import { Result } from '../../common/interface/result.interface';
-import { DefaultDTOValidationPipe } from '../../common/pipes/DefaultDTOValidationPipe';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { UserService } from './user.service';
 import {
@@ -11,7 +10,6 @@ import {
   Query,
   Req,
   UseGuards,
-  UsePipes,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageDTO } from './dto/page.dto';
@@ -26,7 +24,6 @@ export class UserController {
   @ApiOperation({ summary: '根据id获取用户信息' })
   @ApiCookieAuth()
   @UseGuards(JwtAuthGuard)
-  @UsePipes(DefaultDTOValidationPipe)
   getDetail(@Query() query: any) {
     return this.UserService.getDetailById(query);
   }
@@ -51,7 +48,6 @@ export class UserController {
   @ApiOperation({ summary: '获取用户分页' })
   @ApiCookieAuth()
   @UseGuards(JwtAuthGuard)
-  @UsePipes(DefaultDTOValidationPipe)
   getPage(@Body() body: PageDTO): Promise<Result> {
     return this.UserService.getPage(body);
   }

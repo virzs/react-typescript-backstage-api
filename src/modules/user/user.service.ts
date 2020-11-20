@@ -100,10 +100,13 @@ export class UserService {
    */
   async updateInfo(body): Promise<Result> {
     const { id, avatar, username } = body;
-    const validateUser = this.UserRepository.findOne({ where: { username } });
+    console.log(body);
+    const validateUser = await this.UserRepository.findOne({
+      where: { username },
+    });
     if (validateUser) throw new BadRequestException('该用户名已存在');
     //TODO验证参数，验证参数管道
-    const user = await this.UserRepository.update({ id }, { avatar, username });
+    const user = await this.UserRepository.update({ id }, body);
     if (!user) throw new BadRequestException('出现错误请稍后重试');
     return { code: 200, msg: '更新成功' };
   }
