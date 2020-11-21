@@ -25,7 +25,6 @@ export class DefaultDTOValidationPipe implements PipeTransform<any> {
       }
     }
     const delObj = plainToClass(metatype, deleteUndefined);
-    console.log(deleteUndefined)
     const errors = await validate(delObj);
     if (errors.length > 0) {
       console.log('error', Object.values(errors[0].constraints)[0]);

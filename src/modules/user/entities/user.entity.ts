@@ -59,10 +59,10 @@ export class User {
 
   @Column({
     type: 'int',
-    default: 0,
-    comment: '账号类型：0普通用户、1编辑者、2作者、3管理员',
+    default: 3,
+    comment: '账号类型：0管理员、1作者、2编辑者、3普通用户',
   })
-  type: number;
+  role: number;
 
   @Column({
     type: 'int',
