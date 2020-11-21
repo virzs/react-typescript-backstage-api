@@ -30,7 +30,11 @@ export class AuthService {
 
   async findUser(account) {
     const user = await this.userService.validateUserByAccount(account);
-    if (user) return user;
+    if (user) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, salt, ...result } = user;
+      return result;
+    }
     throw new BadRequestException('用户不存在');
   }
 
