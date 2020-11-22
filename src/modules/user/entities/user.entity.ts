@@ -1,7 +1,9 @@
+import { Role } from 'src/modules/role/entities/role.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -57,12 +59,12 @@ export class User {
   })
   avatar: string;
 
-  @Column({
-    type: 'int',
-    default: 3,
-    comment: '账号类型：0管理员、1作者、2编辑者、3普通用户',
-  })
-  role: number;
+  @ManyToOne(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    type => Role,
+    role => role.users,
+  )
+  role: Role;
 
   @Column({
     type: 'int',
