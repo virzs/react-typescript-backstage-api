@@ -1,5 +1,12 @@
+import { Article_Classify } from './article_classify.entity';
 import { CreateAndUpdateTimeEntity } from 'src/common/entities/createAndUpdateTime.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Article extends CreateAndUpdateTimeEntity {
@@ -27,9 +34,15 @@ export class Article extends CreateAndUpdateTimeEntity {
 
   @Column({
     type: 'varchar',
-    comment: '所属分类id',
+    length: 20,
+    comment: '作者',
   })
-  classifyId: string;
+  author: string;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  @ManyToMany(type => Article_Classify)
+  @JoinTable()
+  classify: Article_Classify[];
 
   @Column({
     type: 'int',

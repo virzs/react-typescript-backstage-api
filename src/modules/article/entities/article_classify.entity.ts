@@ -2,7 +2,7 @@ import { CreateAndUpdateTimeEntity } from 'src/common/entities/createAndUpdateTi
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Article extends CreateAndUpdateTimeEntity {
+export class Article_Classify extends CreateAndUpdateTimeEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
