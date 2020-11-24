@@ -35,6 +35,7 @@ export class Article_Classify extends CreateAndUpdateTimeEntity {
 
   @Column({
     type: 'varchar',
+    nullable: true,
     comment: '父级分类id',
   })
   parentId: string;
