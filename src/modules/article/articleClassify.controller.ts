@@ -1,5 +1,5 @@
 import { Result } from 'src/common/interface/result.interface';
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import JwtAuthGuard from '../auth/guard/jwtAuth.guard';
 import { ArticleClassifyService } from './articleClassify.service';
@@ -15,5 +15,13 @@ export class ArticleClassifyController {
   @UseGuards(JwtAuthGuard)
   addClassify(@Body() body: addClassifyDTO): Promise<Result> {
     return this.ClassifyService.addClassify(body);
+  }
+
+  @Get('tree-list')
+  @ApiOperation({ summary: '获取树形列表' })
+  @ApiCookieAuth()
+  @UseGuards(JwtAuthGuard)
+  getTreeList(): Promise<Result> {
+    return this.ClassifyService.getTreeList();
   }
 }
