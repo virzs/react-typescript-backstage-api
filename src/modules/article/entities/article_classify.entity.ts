@@ -1,7 +1,15 @@
 import { CreateAndUpdateTimeEntity } from 'src/common/entities/createAndUpdateTime.entity';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  Tree,
+  TreeChildren,
+  TreeParent,
+} from 'typeorm';
 
 @Entity()
+@Tree('nested-set')
 export class Article_Classify extends CreateAndUpdateTimeEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -33,10 +41,9 @@ export class Article_Classify extends CreateAndUpdateTimeEntity {
   })
   level: number;
 
-  @Column({
-    type: 'varchar',
-    nullable: true,
-    comment: '父级分类id',
-  })
-  parentId: string;
+  @TreeParent()
+  parent: Article_Classify;
+
+  @TreeChildren()
+  children: Article_Classify[];
 }
