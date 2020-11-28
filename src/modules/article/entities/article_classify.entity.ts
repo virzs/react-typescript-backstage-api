@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-@Tree('nested-set')
+@Tree('materialized-path')
 export class Article_Classify extends CreateAndUpdateTimeEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -41,9 +41,9 @@ export class Article_Classify extends CreateAndUpdateTimeEntity {
   })
   level: number;
 
-  @TreeParent()
-  parent: Article_Classify;
-
   @TreeChildren()
   children: Article_Classify[];
+
+  @TreeParent()
+  parent: Article_Classify;
 }

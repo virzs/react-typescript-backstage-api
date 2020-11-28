@@ -31,4 +31,20 @@ export class ArticleClassifyService {
     if (!tree) throw new BadRequestException('获取失败');
     return { code: 200, msg: '获取成功', data: tree };
   }
+
+  async getList(req) {
+    const id = req.query.id || null;
+    const data = await this.ClassifyRepository.findOne({ where: { id } });
+    if (!data && id !== null) throw new BadRequestException('该分类不存在');
+    const list =
+      id === null
+        ? await this.ClassifyTreeRepository.findRoots()
+        : await this.ClassifyTreeRepository.findDescendantsTree(data);
+    if (!list) throw new BadRequestException('操作失败');
+    return { code: 200, msg: '查询成功', data: list };
+  }
+
+  async updateClassify(body) {
+    return { code: 200, msg: '修改成功' };
+  }
 }

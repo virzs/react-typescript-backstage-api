@@ -63,7 +63,8 @@ export class UserService {
       .addSelect(['user.refreshToken'])
       .getOne();
     const isMatches = await bcrypt.compare(refreshToken, user.refreshToken);
-    if (isMatches) return user;
+    if (!isMatches) throw new BadRequestException('用户已注销');
+    return user;
   }
 
   /**
