@@ -52,8 +52,7 @@ export class User {
   salt: string;
 
   @Column({
-    type: 'varchar',
-    length: 1024,
+    type: 'longtext',
     nullable: true,
     comment: '用户头像',
   })

@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Result } from 'src/common/interface/result.interface';
-import { encryptPassword, makeSalt } from 'src/utils/cryptogram';
+import { encryptPassword, hashAvatar, makeSalt } from 'src/utils/cryptogram';
 import { UserService } from '../user/user.service';
 @Injectable()
 export class AuthService {
@@ -54,6 +54,8 @@ export class AuthService {
     }
     const salt = makeSalt();
     const hashPassword = encryptPassword(body.password, salt);
+    const avatar = hashAvatar(body.account, salt);
+    body.avatar = avatar;
     body.password = hashPassword;
     body.salt = salt;
     const res = await this.userService.addUser(body);
