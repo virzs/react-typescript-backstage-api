@@ -24,6 +24,11 @@ export function encryptPassword(password: string, salt: string): string {
   );
 }
 
+/**
+ * 生成随机头像
+ * @param account 账号
+ * @param salt 加密盐
+ */
 export function hashAvatar(account: string, salt: string): string {
   if (!account || !salt) return '';
   const tempSalt = Buffer.from(salt, 'base64');
