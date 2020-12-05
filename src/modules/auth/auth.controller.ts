@@ -54,7 +54,7 @@ export class AuthController {
   @UsePipes(DefaultDTOValidationPipe)
   async login(@Body() body: LoginDTO, @Req() req, @Res() res) {
     //req为local验证后返回的用户信息A
-    return this.authService.loginWithCookies(body, req, res);
+    return this.authService.loginWithCookiesOrHeaders(body, req, res);
   }
 
   /**
@@ -72,6 +72,6 @@ export class AuthController {
   @ApiOperation({ summary: '注销登录' })
   @UseGuards(JwtAuthGuard)
   async loginout(@Req() req, @Res() res) {
-    return this.authService.getCookieForLoginOut(req, res);
+    return this.authService.getCookieOrHeadersForLoginOut(req, res);
   }
 }
