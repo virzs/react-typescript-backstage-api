@@ -32,6 +32,25 @@ export class ArticleClassifyService {
     return { code: 200, msg: '获取成功', data: tree };
   }
 
+  async getTreePage(req) {
+    const { page, pageSize, ...params } = req.query;
+    console.log(page, pageSize, params);
+    const pageData = await this.ClassifyTreeRepository.createQueryBuilder(
+      'article_classify',
+    )
+      .where(params)
+      .skip((page - 1) * pageSize)
+      .take(pageSize) // 取pageSize筆數
+      .getManyAndCount(); //返回总数
+    const data = {
+      reconds: pageData[0],
+      total: pageData[1],
+      page,
+      pageSize,
+    };
+    return { code: 200, msg: '获取成功', data };
+  }
+
   async getList(req) {
     const id = req.query.id || null;
     const data = await this.ClassifyRepository.findOne({ where: { id } });
