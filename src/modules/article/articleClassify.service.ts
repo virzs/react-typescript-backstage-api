@@ -26,6 +26,14 @@ export class ArticleClassifyService {
     return { code: 200, msg: '添加成功' };
   }
 
+  async editClassify(body) {
+    const { id, ...up } = body;
+    const update = await this.ClassifyRepository.update(id, up);
+    console.log(update, id, up);
+    if (!update) throw new BadRequestException('修改失败');
+    return { code: 200, msg: '修改成功' };
+  }
+
   async getTreeList() {
     const tree = await this.ClassifyTreeRepository.findTrees();
     if (!tree) throw new BadRequestException('获取失败');

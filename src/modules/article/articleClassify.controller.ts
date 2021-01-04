@@ -1,3 +1,4 @@
+import { editClassifyDTO } from './dto/editArticleClassify.dto';
 import { PageDTO } from './../article/dto/page.dto';
 import { Result } from 'src/common/interface/result.interface';
 import {
@@ -5,6 +6,7 @@ import {
   Controller,
   Get,
   Post,
+  Put,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -23,6 +25,13 @@ export class ArticleClassifyController {
   @UseGuards(JwtAuthGuard)
   addClassify(@Body() body: addClassifyDTO): Promise<Result> {
     return this.ClassifyService.addClassify(body);
+  }
+
+  @Put('edit')
+  @ApiOperation({ summary: '编辑文章分类' })
+  @UseGuards(JwtAuthGuard)
+  editClassify(@Body() body: editClassifyDTO): Promise<Result> {
+    return this.ClassifyService.editClassify(body);
   }
 
   @Get('tree-list')
