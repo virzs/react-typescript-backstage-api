@@ -10,6 +10,7 @@ import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './modules/database/database.module';
 import databaseConfig from './config/database.config';
 import JWTConfig from './config/JWT.config';
+import { ArticleClassifyModule } from './modules/article/classify.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import JWTConfig from './config/JWT.config';
     UserModule,
     SharedModule,
     AuthModule,
+    ArticleClassifyModule,
   ],
   controllers: [AppController],
   providers: [

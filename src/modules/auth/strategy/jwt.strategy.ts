@@ -3,7 +3,6 @@ import { Strategy, ExtractJwt, StrategyOptions } from 'passport-jwt';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ConfigService } from '@nestjs/config';
-import { Request } from 'express';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -12,11 +11,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly configService: ConfigService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (request: Request) => {
-          return request?.cookies?.Authentication;
-        },
-      ]),
+      /* 通过cookie方式获取token，已废弃 */
+
+      // jwtFromRequest: ExtractJwt.fromExtractors([
+      //   (request: Request) => {
+      //     console.log(request.header.token);
+      //     return request?.cookies?.Authentication;
+      //   },
+      // ]),
+
+      /* 通过header方式获取token */
+
+      jwtFromRequest: ExtractJwt.fromHeader('access_token'),
       ignoreExpiration: false,
       secretOrKey: configService.get('JWT_ACCESS_TOKEN_SECRET'),
     } as StrategyOptions);

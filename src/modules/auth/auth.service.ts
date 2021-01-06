@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Result } from 'src/common/interface/result.interface';
-import { encryptPassword, makeSalt } from 'src/utils/cryptogram';
+import { encryptPassword, hashAvatar, makeSalt } from 'src/utils/cryptogram';
 import { UserService } from '../user/user.service';
 @Injectable()
 export class AuthService {
@@ -54,6 +54,8 @@ export class AuthService {
     }
     const salt = makeSalt();
     const hashPassword = encryptPassword(body.password, salt);
+    const avatar = hashAvatar(body.account, salt);
+    body.avatar = avatar;
     body.password = hashPassword;
     body.salt = salt;
     const res = await this.userService.addUser(body);
@@ -102,18 +104,22 @@ export class AuthService {
       type: user.type,
       state: user.state,
     };
-    const accessTokenCookie = await this.getAccessToken(payload);
-    const accessCookie = `Authentication=${accessTokenCookie}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-    )}`;
-    request.res.setHeader('Set-Cookie', accessCookie);
-    return { code: 200, msg: '刷新成功' };
+    /* cookie方式刷新token，已废弃 */
+
+    // const accessTokenCookie = await this.getAccessToken(payload);
+    // const accessCookie = `Authentication=${accessTokenCookie}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+    //   'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+    // )}`;
+    // request.res.setHeader('Set-Cookie', accessCookie);
+
+    const accessToken = await this.getAccessToken(payload);
+    return { code: 200, msg: '刷新成功', data: { access_token: accessToken } };
   }
 
   /**
    * 登录
    */
-  async loginWithCookies(body: any, req: any, res: any) {
+  async loginWithCookiesOrHeaders(body, req, res) {
     const user = req.user;
     const payload = {
       account: body.account,
@@ -123,33 +129,39 @@ export class AuthService {
     };
     const accessToken = await this.getAccessToken(payload);
     const refreshToken = await this.getRefreshToken(payload);
-    const accessCookie = `Authentication=${accessToken}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-    )}`;
-    const refreshCookie = `Refresh=${refreshToken}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
-    )}`;
+    /* 生成cookie，已废弃 */
+    // const accessCookie = `Authentication=${accessToken}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+    //   'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+    // )}`;
+    // const refreshCookie = `Refresh=${refreshToken}; HttpOnly; Path=/; Max-Age=${this.configService.get(
+    //   'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+    // )}`;
     await this.userService.updateOrSetRefreshTokenById(
       payload.id,
       refreshToken,
     );
-    res.setHeader('Set-Cookie', [accessCookie, refreshCookie]);
+    // res.setHeader('Set-Cookie', [accessCookie, refreshCookie]);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, salt, ...result } = user;
     return res.send({
       code: 200,
       msg: '登陆成功',
       data: {
+        accessToken,
+        refreshToken,
         ...result,
       },
     });
   }
 
-  async getCookieForLoginOut(req: any, res: any) {
-    const accessCookie = `Authentication=; HttpOnly; Path=/; Max-Age=0`;
-    const refreshCookie = `Refresh=; HttpOnly; Path=/; Max-Age=0`;
+  async getCookieOrHeadersForLoginOut(req: any, res: any) {
+    /* cookie方式登出 */
+    // const accessCookie = `Authentication=; HttpOnly; Path=/; Max-Age=0`;
+    // const refreshCookie = `Refresh=; HttpOnly; Path=/; Max-Age=0`;
+    // res.setHeader('Set-Cookie', [accessCookie, refreshCookie]);
+
+    //存在问题：仅数据库删除token，accesstoken短期依旧可用
     await this.userService.removeRefreshToken(req.user.id);
-    res.setHeader('Set-Cookie', [accessCookie, refreshCookie]);
     return res.send({
       code: 200,
       msg: '注销成功',

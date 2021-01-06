@@ -1,3 +1,4 @@
+import { hashAvatar } from 'src/utils/cryptogram';
 import { Result } from '../../common/interface/result.interface';
 import { User } from './entities/user.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
@@ -63,15 +64,25 @@ export class UserService {
       .addSelect(['user.refreshToken'])
       .getOne();
     const isMatches = await bcrypt.compare(refreshToken, user.refreshToken);
-    if (isMatches) return user;
+    if (!isMatches) throw new BadRequestException('用户已注销');
+    return user;
   }
 
   /**
    * 获取用户详情
    */
   async getDetail(req): Promise<Result> {
+    const user = await this.validateUserByAccount(req.user.account);
+    if (user && !user.avatar) {
+      const avatar = hashAvatar(user.account, user.salt);
+      user.avatar = avatar;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { username, account, ...updateData } = user;
+      const addAvatar = await this.updateInfo(updateData);
+      if (!addAvatar) throw new BadRequestException('获取用户信息失败');
+    }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, salt, ...result } = req.user;
+    const { password, salt, ...result } = user;
     return { code: 200, msg: '获取成功', data: result };
   }
 
