@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, TreeRepository } from 'typeorm';
-import { Article_Classify } from './entities/article_classify.entity';
+import { Article_Classify } from '../entities/classify.entity';
 
 @Injectable()
 export class ArticleClassifyService {

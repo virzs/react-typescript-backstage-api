@@ -1,4 +1,4 @@
-import { Article_Classify } from './article_classify.entity';
+import { Article_Classify } from './classify.entity';
 import { CreateAndUpdateTimeEntity } from 'src/common/entities/createAndUpdateTime.entity';
 import {
   Column,

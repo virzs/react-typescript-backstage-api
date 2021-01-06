@@ -9,14 +9,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import JwtAuthGuard from '../auth/guard/jwtAuth.guard';
-import { ArticleClassifyService } from './articleClassify.service';
+import JwtAuthGuard from '../../auth/guard/jwtAuth.guard';
+import { ArticleClassifyService } from '../services/classify.service';
 import {
   addClassifyDTO,
   editClassifyDTO,
   getClassifyListDTO,
   getClassifyPageDTO,
-} from './dto/articleClassify.dto';
+} from '../dtos/classify.dto';
 
 @ApiTags('文章分类')
 @Controller('article/classify')

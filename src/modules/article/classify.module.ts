@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ArticleClassifyController } from './articleClassify.controller';
-import { ArticleClassifyService } from './articleClassify.service';
-import { Article_Classify } from './entities/article_classify.entity';
+import { ArticleClassifyController } from './controllers/classify.controller';
+import { ArticleClassifyService } from './services/classify.service';
+import { Article_Classify } from './entities/classify.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Article_Classify])],
