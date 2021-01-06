@@ -1,5 +1,3 @@
-import { editClassifyDTO } from './dto/editArticleClassify.dto';
-import { PageDTO } from './../article/dto/page.dto';
 import { Result } from 'src/common/interface/result.interface';
 import {
   Body,
@@ -13,8 +11,12 @@ import {
 import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import JwtAuthGuard from '../auth/guard/jwtAuth.guard';
 import { ArticleClassifyService } from './articleClassify.service';
-import { addClassifyDTO } from './dto/addArticleClassify.dto';
-import { getListDTO } from './dto/getList.dto';
+import {
+  addClassifyDTO,
+  editClassifyDTO,
+  getClassifyListDTO,
+  getClassifyPageDTO,
+} from './dto/articleClassify.dto';
 
 @ApiTags('文章分类')
 @Controller('article/classify')
@@ -44,7 +46,7 @@ export class ArticleClassifyController {
   @Get('tree-page')
   @ApiOperation({ summary: '获取分类分页' })
   @UseGuards(JwtAuthGuard)
-  getTreePage(@Request() req: PageDTO): Promise<Result> {
+  getTreePage(@Request() req: getClassifyPageDTO): Promise<Result> {
     return this.ClassifyService.getTreePage(req);
   }
 
@@ -52,7 +54,7 @@ export class ArticleClassifyController {
   @ApiOperation({ summary: '获取分类列表' })
   @ApiCookieAuth()
   @UseGuards(JwtAuthGuard)
-  getList(@Request() req: getListDTO): Promise<Result> {
+  getList(@Request() req: getClassifyListDTO): Promise<Result> {
     return this.ClassifyService.getList(req);
   }
 }
