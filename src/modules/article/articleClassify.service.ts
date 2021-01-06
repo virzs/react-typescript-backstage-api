@@ -70,8 +70,4 @@ export class ArticleClassifyService {
     if (!list) throw new BadRequestException('操作失败');
     return { code: 200, msg: '查询成功', data: list };
   }
-
-  async updateClassify(body) {
-    return { code: 200, msg: '修改成功' };
-  }
 }
