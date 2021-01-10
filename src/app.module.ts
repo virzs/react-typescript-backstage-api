@@ -1,6 +1,6 @@
-import { ArticleModule } from './modules/article/article.module';
+import ArticleModule from './modules/article/article.module'; //文章模块
 import { SharedModule } from './shared/shared.module';
-import { UserModule } from './modules/user/user.module';
+import UserModule from './modules/user/user.module'; //用户模块
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';

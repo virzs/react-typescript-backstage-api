@@ -1,6 +1,6 @@
-import { Result } from '../../common/interface/result.interface';
+import { Result } from '../../../common/interface/result.interface';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { UserService } from './user.service';
+import { UserService } from '../services/user.service';
 import {
   Body,
   Controller,
@@ -12,9 +12,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PageDTO } from './dto/page.dto';
-import JwtAuthGuard from '../auth/guard/jwtAuth.guard';
-import { UpdateDTO } from './dto/update.dto';
+import { PageDTO } from '../dtos/page.dto';
+import JwtAuthGuard from '../../auth/guards/jwtAuth.guard';
+import { UpdateDTO } from '../dtos/update.dto';
 import { RabcGuard } from 'src/common/guards/rbac.guard';
 
 @ApiTags('用户')
