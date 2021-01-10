@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import JwtAuthGuard from '../../auth/guard/jwtAuth.guard';
+import JwtAuthGuard from '../../auth/guards/jwtAuth.guard';
 import { ArticleClassifyService } from '../services/classify.service';
 import {
   addClassifyDTO,

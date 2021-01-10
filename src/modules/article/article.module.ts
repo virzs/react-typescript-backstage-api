@@ -9,4 +9,4 @@ import { Module } from '@nestjs/common';
 @Module({
   imports: [ClassifyModule],
 })
-export class ArticleModule {}
+export default class ArticleModule {}
