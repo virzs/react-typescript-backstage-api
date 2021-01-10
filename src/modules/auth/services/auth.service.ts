@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Result } from 'src/common/interface/result.interface';
 import { encryptPassword, hashAvatar, makeSalt } from 'src/utils/cryptogram';
-import { UserService } from '../user/user.service';
+import { UserService } from '../../user/services/user.service';
 @Injectable()
 export class AuthService {
   constructor(
