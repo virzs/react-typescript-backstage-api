@@ -1,6 +1,6 @@
 import { hashAvatar } from 'src/utils/cryptogram';
-import { Result } from '../../common/interface/result.interface';
-import { User } from './entities/user.entity';
+import { Result } from '../../../common/interface/result.interface';
+import { User } from '../entities/user.entity';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

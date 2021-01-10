@@ -10,13 +10,13 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { DefaultDTOValidationPipe } from 'src/common/pipes/defaultDTOValidation.pipe';
-import { resLogin, resRegister } from '../user/classes/response';
-import { RegisterDTO } from '../user/dto/register.dto';
-import { AuthService } from './auth.service';
-import { LoginDTO } from './dto/login.dto';
-import JwtAuthGuard from './guard/jwtAuth.guard';
-import JwtRefreshGuard from './guard/jwtRefresh.guard';
-import { LocalAuthGuard } from './guard/localAuth.guard';
+import { resLogin, resRegister } from '../../user/classes/response';
+import { RegisterDTO } from '../../user/dtos/register.dto';
+import { AuthService } from '../services/auth.service';
+import { LoginDTO } from '../dtos/auth.dto';
+import JwtAuthGuard from '../guards/jwtAuth.guard';
+import JwtRefreshGuard from '../guards/jwtRefresh.guard';
+import { LocalAuthGuard } from '../guards/localAuth.guard';
 
 @ApiTags('授权')
 @Controller('auth')

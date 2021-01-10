@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ArticleClassifyController } from './controllers/classify.controller';
-import { ArticleClassifyService } from './services/classify.service';
-import { Article_Classify } from './entities/classify.entity';
+import { ArticleClassifyController } from '../controllers/classify.controller';
+import { ArticleClassifyService } from '../services/classify.service';
+import { Article_Classify } from '../entities/classify.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Article_Classify])],
@@ -10,4 +10,4 @@ import { Article_Classify } from './entities/classify.entity';
   providers: [ArticleClassifyService],
   exports: [ArticleClassifyService],
 })
-export class ArticleClassifyModule {}
+export class ClassifyModule {}

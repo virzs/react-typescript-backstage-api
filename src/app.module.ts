@@ -1,5 +1,6 @@
+import ArticleModule from './modules/article/article.module'; //文章模块
 import { SharedModule } from './shared/shared.module';
-import { UserModule } from './modules/user/user.module';
+import UserModule from './modules/user/user.module'; //用户模块
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,7 +11,6 @@ import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './modules/database/database.module';
 import databaseConfig from './config/database.config';
 import JWTConfig from './config/JWT.config';
-import { ArticleClassifyModule } from './modules/article/classify.module';
 
 @Module({
   imports: [
@@ -48,7 +48,7 @@ import { ArticleClassifyModule } from './modules/article/classify.module';
     UserModule,
     SharedModule,
     AuthModule,
-    ArticleClassifyModule,
+    ArticleModule,
   ],
   controllers: [AppController],
   providers: [
