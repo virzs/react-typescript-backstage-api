@@ -5,7 +5,7 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Connection } from 'typeorm';
-import { AuthModule } from './modules/auth/auth.module';
+import AuthModule from './modules/auth/auth.module'; //授权模块
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './modules/database/database.module';
