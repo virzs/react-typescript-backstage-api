@@ -34,6 +34,14 @@ export class ArticleClassifyService {
     return { code: 200, msg: '修改成功' };
   }
 
+  async deleteClassify(body) {
+    const { id } = body;
+    const classify = await this.ClassifyRepository.findOne(id);
+    const deleted = await this.ClassifyRepository.remove(classify);
+    if (!deleted) throw new BadRequestException('删除失败');
+    return { code: 200, msg: '删除成功' };
+  }
+
   async getTreeList() {
     const tree = await this.ClassifyTreeRepository.findTrees();
     if (!tree) throw new BadRequestException('获取失败');
