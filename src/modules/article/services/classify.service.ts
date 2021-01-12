@@ -36,8 +36,7 @@ export class ArticleClassifyService {
 
   async deleteClassify(body) {
     const { id } = body;
-    const classify = await this.ClassifyRepository.findOne(id);
-    const deleted = await this.ClassifyRepository.remove(classify);
+    const deleted = await this.ClassifyRepository.delete(id);
     if (!deleted) throw new BadRequestException('删除失败');
     return { code: 200, msg: '删除成功' };
   }
