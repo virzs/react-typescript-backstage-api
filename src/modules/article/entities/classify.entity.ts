@@ -1,7 +1,9 @@
+import { Article } from './article.entity';
 import { CreateAndUpdateTimeEntity } from 'src/common/entities/createAndUpdateTime.entity';
 import {
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Tree,
   TreeChildren,
@@ -24,6 +26,7 @@ export class Article_Classify extends CreateAndUpdateTimeEntity {
     type: 'varchar',
     length: 30,
     comment: '别名',
+    default: null,
   })
   alias: string;
 
@@ -31,6 +34,7 @@ export class Article_Classify extends CreateAndUpdateTimeEntity {
     type: 'varchar',
     length: 100,
     comment: '分类描述',
+    default: null,
   })
   introduction: string;
 
@@ -46,4 +50,10 @@ export class Article_Classify extends CreateAndUpdateTimeEntity {
 
   @TreeParent()
   parent: Article_Classify;
+
+  @OneToMany(
+    () => Article,
+    article => article.classify,
+  )
+  articles: Article[];
 }
