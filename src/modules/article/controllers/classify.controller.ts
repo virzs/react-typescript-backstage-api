@@ -1,7 +1,15 @@
+import {
+  addClassifyDTO,
+  editClassifyDTO,
+  getClassifyListDTO,
+  getClassifyPageDTO,
+  deleteClassifyDTO,
+} from './../dtos/classify.dto';
 import { Result } from 'src/common/interface/result.interface';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Post,
   Put,
@@ -11,12 +19,6 @@ import {
 import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import JwtAuthGuard from '../../auth/guards/jwtAuth.guard';
 import { ArticleClassifyService } from '../services/classify.service';
-import {
-  addClassifyDTO,
-  editClassifyDTO,
-  getClassifyListDTO,
-  getClassifyPageDTO,
-} from '../dtos/classify.dto';
 
 @ApiTags('文章分类')
 @Controller('article/classify')
@@ -34,6 +36,13 @@ export class ArticleClassifyController {
   @UseGuards(JwtAuthGuard)
   editClassify(@Body() body: editClassifyDTO): Promise<Result> {
     return this.ClassifyService.editClassify(body);
+  }
+
+  @Delete('delete')
+  @ApiOperation({ summary: '删除文章分类' })
+  @UseGuards(JwtAuthGuard)
+  deleteClassify(@Body() body: deleteClassifyDTO): Promise<Result> {
+    return this.ClassifyService.deleteClassify(body);
   }
 
   @Get('tree-list')

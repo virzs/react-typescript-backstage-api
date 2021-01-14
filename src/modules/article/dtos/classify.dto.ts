@@ -72,6 +72,13 @@ export class editClassifyDTO {
   parentId: string;
 }
 
+export class deleteClassifyDTO {
+  @ApiProperty({ description: '当前分类id' })
+  @IsString()
+  @Expose()
+  id: string;
+}
+
 export class getClassifyListDTO {
   @ApiProperty({ description: '分类id，为空时获取第一级分类' })
   @IsString()
