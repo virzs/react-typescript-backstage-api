@@ -3,6 +3,7 @@ import {
   editTagDTO,
   deleteTagDTO,
   detailTagDTO,
+  pageTagDTO,
 } from './../dtos/tag.dto';
 import { Result } from 'src/common/interface/result.interface';
 import { ArticleTagService } from './../services/tag.service';
@@ -49,5 +50,12 @@ export class ArticleTagController {
   @UseGuards(JwtAuthGuard)
   detail(@Query() req: detailTagDTO): Promise<Result> {
     return this.TagService.detail(req);
+  }
+
+  @Get('page')
+  @ApiOperation({ summary: '获取标签分页' })
+  @UseGuards(JwtAuthGuard)
+  page(@Query() req: pageTagDTO): Promise<Result> {
+    return this.TagService.page(req);
   }
 }

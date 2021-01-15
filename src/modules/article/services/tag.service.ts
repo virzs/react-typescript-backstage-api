@@ -33,6 +33,22 @@ export class ArticleTagService {
     const { id } = req;
     const result = await this.TagRepository.findOne(id);
     if (!result) throw new BadRequestException('没有找到这个标签');
-    return { code: 200, msg: '获取成功', result };
+    return { code: 200, msg: '获取成功', data: result };
+  }
+
+  async page(req) {
+    const { current, size } = req;
+    const result = this.TagRepository.createQueryBuilder('article_tag')
+      .skip((current - 1) * size)
+      .take(size)
+      .getManyAndCount();
+    if (!result) throw new BadRequestException('获取分页信息失败');
+    const data = {
+      reconds: result[0],
+      total: result[1],
+      current,
+      size,
+    };
+    return { code: 200, msg: '获取成功', data };
   }
 }
