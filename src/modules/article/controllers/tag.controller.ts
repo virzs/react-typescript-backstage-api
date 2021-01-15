@@ -1,7 +1,21 @@
-import { addTagDTO, editTagDTO, deleteTagDTO } from './../dtos/tag.dto';
+import {
+  addTagDTO,
+  editTagDTO,
+  deleteTagDTO,
+  detailTagDTO,
+} from './../dtos/tag.dto';
 import { Result } from 'src/common/interface/result.interface';
 import { ArticleTagService } from './../services/tag.service';
-import { Body, Controller, Delete, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import JwtAuthGuard from 'src/modules/auth/guards/jwtAuth.guard';
 
@@ -16,7 +30,7 @@ export class ArticleTagController {
     return this.TagService.addTag(body);
   }
 
-  @Post('edit')
+  @Put('edit')
   @ApiOperation({ summary: '编辑标签' })
   @UseGuards(JwtAuthGuard)
   editTag(@Body() body: editTagDTO): Promise<Result> {
@@ -28,5 +42,12 @@ export class ArticleTagController {
   @UseGuards(JwtAuthGuard)
   deleteTag(@Body() body: deleteTagDTO): Promise<Result> {
     return this.TagService.deleteTag(body);
+  }
+
+  @Get('detail')
+  @ApiOperation({ summary: '获取标签信息' })
+  @UseGuards(JwtAuthGuard)
+  detail(@Query() req: detailTagDTO): Promise<Result> {
+    return this.TagService.detail(req);
   }
 }

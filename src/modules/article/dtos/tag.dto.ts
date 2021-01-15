@@ -57,3 +57,11 @@ export class deleteTagDTO {
   @Expose()
   id: string;
 }
+
+export class detailTagDTO {
+  @ApiProperty({ description: '标签id' })
+  @IsString()
+  @IsNotEmpty({ message: '标签id不能为空' })
+  @Expose()
+  id: string;
+}

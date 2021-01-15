@@ -28,4 +28,11 @@ export class ArticleTagService {
     if (!deleted) throw new BadRequestException('删除失败');
     return { code: 200, msg: '删除成功' };
   }
+
+  async detail(req) {
+    const { id } = req;
+    const result = await this.TagRepository.findOne(id);
+    if (!result) throw new BadRequestException('没有找到这个标签');
+    return { code: 200, msg: '获取成功', result };
+  }
 }
