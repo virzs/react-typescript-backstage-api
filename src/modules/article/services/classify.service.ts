@@ -29,7 +29,6 @@ export class ArticleClassifyService {
   async editClassify(body) {
     const { id, ...up } = body;
     const update = await this.ClassifyRepository.update(id, up);
-    console.log(update, id, up);
     if (!update) throw new BadRequestException('修改失败');
     return { code: 200, msg: '修改成功' };
   }
