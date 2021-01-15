@@ -1,6 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsNotEmpty, IsString, MaxLength, IsNumber } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  MaxLength,
+  IsNumberString,
+} from 'class-validator';
 
 export class addTagDTO {
   @ApiProperty({ description: '标签名称' })
@@ -68,13 +73,13 @@ export class detailTagDTO {
 
 export class pageTagDTO {
   @ApiProperty({ description: '当前页' })
-  @IsNumber()
+  @IsNumberString()
   @IsNotEmpty({ message: '当前页数不能为空' })
   @Expose()
   current: number;
 
   @ApiProperty({ description: '每页条数' })
-  @IsNumber()
+  @IsNumberString()
   @IsNotEmpty({ message: '每页页数不能为空' })
   @Expose()
   size: number;

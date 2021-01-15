@@ -38,7 +38,7 @@ export class ArticleTagService {
 
   async page(req) {
     const { current, size } = req;
-    const result = this.TagRepository.createQueryBuilder('article_tag')
+    const result = await this.TagRepository.createQueryBuilder('article_tag')
       .skip((current - 1) * size)
       .take(size)
       .getManyAndCount();
@@ -46,8 +46,8 @@ export class ArticleTagService {
     const data = {
       reconds: result[0],
       total: result[1],
-      current,
-      size,
+      current: Number(current),
+      size: Number(size),
     };
     return { code: 200, msg: '获取成功', data };
   }
