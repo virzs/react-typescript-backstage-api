@@ -40,6 +40,13 @@ export class ArticleClassifyService {
     return { code: 200, msg: '删除成功' };
   }
 
+  async detail(req) {
+    const { id } = req;
+    const result = await this.ClassifyRepository.findOne(id);
+    if (!result) throw new BadRequestException('获取标签信息失败');
+    return { code: 200, msg: '获取成功', data: result };
+  }
+
   async getTreeList() {
     const tree = await this.ClassifyTreeRepository.findTrees();
     if (!tree) throw new BadRequestException('获取失败');
