@@ -13,6 +13,7 @@ import {
   Get,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
 } from '@nestjs/common';
@@ -43,6 +44,13 @@ export class ArticleClassifyController {
   @UseGuards(JwtAuthGuard)
   deleteClassify(@Body() body: deleteClassifyDTO): Promise<Result> {
     return this.ClassifyService.deleteClassify(body);
+  }
+
+  @Get('detail')
+  @ApiOperation({ summary: '获取分类信息' })
+  @UseGuards(JwtAuthGuard)
+  detail(@Query() req): Promise<Result> {
+    return this.ClassifyService.detail(req);
   }
 
   @Get('tree-list')

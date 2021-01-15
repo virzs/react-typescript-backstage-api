@@ -24,7 +24,7 @@ export class Article_Tag extends CreateAndUpdateTimeEntity {
   @Column({
     type: 'varchar',
     length: 100,
-    comment: '分类描述',
+    comment: '标签描述',
     default: null,
   })
   introduction: string;

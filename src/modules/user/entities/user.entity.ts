@@ -1,9 +1,11 @@
+import { Article } from './../../article/entities/article.entity';
 import { Role } from 'src/modules/role/entities/role.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -82,4 +84,10 @@ export class User {
     select: false,
   })
   refreshToken: string;
+
+  @OneToMany(
+    () => Article,
+    article => article.author,
+  )
+  articles: Article[];
 }

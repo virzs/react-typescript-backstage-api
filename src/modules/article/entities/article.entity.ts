@@ -5,8 +5,10 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { User } from 'src/modules/user/entities/user.entity';
 
 @Entity()
 export class Article extends CreateAndUpdateTimeEntity {
@@ -32,17 +34,24 @@ export class Article extends CreateAndUpdateTimeEntity {
   })
   picture: string;
 
-  @Column({
-    type: 'varchar',
-    length: 20,
-    comment: '作者',
-  })
-  author: string;
+  @ManyToOne(
+    () => User,
+    author => author.articles,
+  )
+  author: User;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  @ManyToMany(type => Article_Classify)
+  @ManyToOne(
+    () => Article_Classify,
+    classify => classify.articles,
+  )
+  classify: Article_Classify;
+
+  @ManyToMany(
+    () => Article,
+    article => article.tags,
+  )
   @JoinTable()
-  classify: Article_Classify[];
+  tags: Article[];
 
   @Column({
     type: 'int',
@@ -50,4 +59,11 @@ export class Article extends CreateAndUpdateTimeEntity {
     comment: '是否置顶 0否，1是',
   })
   isTop: number;
+
+  @Column({
+    type: 'int',
+    default: 0,
+    comment: '是否允许评论 0否 1是',
+  })
+  allow_comments: number;
 }

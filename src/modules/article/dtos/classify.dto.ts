@@ -75,6 +75,15 @@ export class editClassifyDTO {
 export class deleteClassifyDTO {
   @ApiProperty({ description: '当前分类id' })
   @IsString()
+  @IsNotEmpty({ message: '分类id不能为空' })
+  @Expose()
+  id: string;
+}
+
+export class detailClassifyDTO {
+  @ApiProperty({ description: '当前分类id' })
+  @IsString()
+  @IsNotEmpty({ message: '分类id不能为空' })
   @Expose()
   id: string;
 }
