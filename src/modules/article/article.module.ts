@@ -1,3 +1,4 @@
+import { ArticleModule as articleModule } from './modules/article.module';
 import { TagModule } from './modules/tag.module';
 import { ClassifyModule } from './modules/classify.module';
 import { Module } from '@nestjs/common';
@@ -7,6 +8,6 @@ import { Module } from '@nestjs/common';
  *
  */
 @Module({
-  imports: [ClassifyModule, TagModule],
+  imports: [ClassifyModule, TagModule, articleModule],
 })
 export default class ArticleModule {}
