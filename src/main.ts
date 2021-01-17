@@ -9,6 +9,7 @@ import { AllExceptionsFilter } from './common/filters/any-exception.fillter';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { DefaultDTOValidationPipe } from './common/pipes/defaultDTOValidation.pipe';
+import { Logger } from './utils/log4';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -40,5 +41,10 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter()); //过滤其他类型异常
   app.useGlobalFilters(new HttpExceptionFilter()); // 过滤处理 HTTP 异常
   await app.listen(envConfigService.get('APP_PORT') || 3000);
+
+  Logger.info(
+    `http://localhost:${envConfigService.get('APP_PORT')}`,
+    '服务启动成功',
+  );
 }
 bootstrap();
