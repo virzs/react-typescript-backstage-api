@@ -14,8 +14,9 @@ import { Logger } from './utils/log4';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const envConfigService = app.get(ConfigService);
+
+  // DocumentBuilder是一个辅助类，有助于结构的基本文件SwaggerModule。它包含几种方法，可用于设置诸如标题，描述，版本等属性。
   const swaggerOptions = new DocumentBuilder()
-    // DocumentBuilder是一个辅助类，有助于结构的基本文件SwaggerModule。它包含几种方法，可用于设置诸如标题，描述，版本等属性。
     .setTitle(envConfigService.get('SWAGGER_UI_TITLE')) //文档标题
     .setDescription(envConfigService.get('SWAGGER_UI_DESC')) //文档介绍
     .setVersion(envConfigService.get('SWAGGER_UI_VERSION')) //文档版本
@@ -30,18 +31,27 @@ async function bootstrap() {
     app,
     document,
   );
-  app.setGlobalPrefix(envConfigService.get('APP_GLOBAL_PATH')); //全局路径
+  //全局路径
+  app.setGlobalPrefix(envConfigService.get('APP_GLOBAL_PATH'));
+
   app.use(cookieParser());
-  app.use(express.json()); // For parsing application/json
-  app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+  // For parsing application/json
+  app.use(express.json());
+  // For parsing application/x-www-form-urlencoded
+  app.use(express.urlencoded({ extended: true }));
   // 监听所有的请求路由，并打印日志
   app.use(logger); //使用日志
+  //默认参数验证
   app.useGlobalPipes(new DefaultDTOValidationPipe());
-  app.useGlobalInterceptors(new TransformInterceptor()); //全局拦截器
-  app.useGlobalFilters(new AllExceptionsFilter()); //过滤其他类型异常
-  app.useGlobalFilters(new HttpExceptionFilter()); // 过滤处理 HTTP 异常
-  await app.listen(envConfigService.get('APP_PORT') || 3000);
+  //全局拦截器
+  app.useGlobalInterceptors(new TransformInterceptor());
+  //过滤其他类型异常
+  app.useGlobalFilters(new AllExceptionsFilter());
+  // 过滤处理 HTTP 异常
+  app.useGlobalFilters(new HttpExceptionFilter());
 
+  await app.listen(envConfigService.get('APP_PORT') || 3000);
+  //输出日志
   Logger.info(
     `http://localhost:${envConfigService.get('APP_PORT')}`,
     '服务启动成功',
