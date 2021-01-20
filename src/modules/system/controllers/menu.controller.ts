@@ -2,6 +2,7 @@ import {
   createMenuDTO,
   updateMenuDTO,
   deleteMenuDTO,
+  detailMenuDTO,
 } from './../dtos/menu.dto';
 import { Result } from 'src/common/interface/result.interface';
 import JwtAuthGuard from 'src/modules/auth/guards/jwtAuth.guard';
@@ -13,6 +14,7 @@ import {
   Get,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -41,6 +43,13 @@ export class MenuController {
   @UseGuards(JwtAuthGuard)
   delete(@Body() body: deleteMenuDTO): Promise<Result> {
     return this.menuService.delete(body);
+  }
+
+  @Get('detail')
+  @ApiOperation({ summary: '获取菜单详情' })
+  @UseGuards(JwtAuthGuard)
+  detail(@Query() query: detailMenuDTO): Promise<Result> {
+    return this.menuService.detial(query);
   }
 
   @Get('tree-list')

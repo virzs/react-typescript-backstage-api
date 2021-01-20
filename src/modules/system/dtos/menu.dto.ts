@@ -105,3 +105,10 @@ export class deleteMenuDTO {
   @IsString()
   id: string;
 }
+
+export class detailMenuDTO {
+  @ApiProperty({ description: '菜单id' })
+  @IsNotEmpty({ message: '菜单id不能为空' })
+  @IsString()
+  id: string;
+}
