@@ -1,3 +1,8 @@
+import {
+  createMenuDTO,
+  updateMenuDTO,
+  deleteMenuDTO,
+} from './../dtos/menu.dto';
 import { Result } from 'src/common/interface/result.interface';
 import JwtAuthGuard from 'src/modules/auth/guards/jwtAuth.guard';
 import { MenuService } from './../services/menu.service';
@@ -20,21 +25,21 @@ export class MenuController {
   @Post('create')
   @ApiOperation({ summary: '新增菜单' })
   @UseGuards(JwtAuthGuard)
-  create(@Body() body): Promise<Result> {
+  create(@Body() body: createMenuDTO): Promise<Result> {
     return this.menuService.create(body);
   }
 
   @Put('update')
   @ApiOperation({ summary: '编辑菜单' })
   @UseGuards(JwtAuthGuard)
-  update(@Body() body): Promise<Result> {
+  update(@Body() body: updateMenuDTO): Promise<Result> {
     return this.menuService.update(body);
   }
 
   @Delete('delete')
   @ApiOperation({ summary: '删除菜单' })
   @UseGuards(JwtAuthGuard)
-  delete(@Body() body): Promise<Result> {
+  delete(@Body() body: deleteMenuDTO): Promise<Result> {
     return this.menuService.delete(body);
   }
 
