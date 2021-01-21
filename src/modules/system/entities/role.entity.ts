@@ -3,7 +3,7 @@ import { User } from 'src/modules/user/entities/user.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('system_role')
-export class SystemRole extends CreateAndUpdateTimeEntity {
+export class System_Role extends CreateAndUpdateTimeEntity {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
 
@@ -11,6 +11,7 @@ export class SystemRole extends CreateAndUpdateTimeEntity {
     type: 'varchar',
     length: 30,
     comment: '角色名称',
+    unique: true,
   })
   name: string;
 

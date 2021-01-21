@@ -1,4 +1,4 @@
-import { SystemRole } from './../../system/entities/role.entity';
+import { System_Role } from './../../system/entities/role.entity';
 import { Article } from './../../article/entities/article.entity';
 import {
   Column,
@@ -61,10 +61,10 @@ export class User {
   avatar: string;
 
   @ManyToOne(
-    () => SystemRole,
+    () => System_Role,
     role => role.user,
   )
-  role: SystemRole;
+  role: System_Role;
 
   @Column({
     type: 'int',

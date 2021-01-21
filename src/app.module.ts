@@ -9,6 +9,7 @@ import * as Joi from '@hapi/joi';
 import databaseConfig from './config/database.config';
 import JWTConfig from './config/JWT.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import SystemModule from './modules/system/system.moduls';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     SharedModule,
     AuthModule,
     ArticleModule,
+    SystemModule,
   ],
 })
 export class AppModule {
