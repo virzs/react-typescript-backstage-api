@@ -1,5 +1,5 @@
+import { SystemRole } from './../../system/entities/role.entity';
 import { Article } from './../../article/entities/article.entity';
-import { Role } from 'src/modules/role/entities/role.entity';
 import {
   Column,
   CreateDateColumn,
@@ -61,11 +61,10 @@ export class User {
   avatar: string;
 
   @ManyToOne(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    type => Role,
-    role => role.users,
+    () => SystemRole,
+    role => role.user,
   )
-  role: Role;
+  role: SystemRole;
 
   @Column({
     type: 'int',
