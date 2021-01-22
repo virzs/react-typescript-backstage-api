@@ -3,6 +3,8 @@ import {
   pageRoleDTO,
   associatedUserDTO,
   associatedUserPageRoleDTO,
+  updateRoleDTO,
+  deleteRoleDTO,
 } from './../dtos/role.dto';
 import { Result } from 'src/common/interface/result.interface';
 import JwtAuthGuard from 'src/modules/auth/guards/jwtAuth.guard';
@@ -10,6 +12,7 @@ import { RoleService } from './../services/role.service';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Post,
   Put,
@@ -27,6 +30,20 @@ export class RoleController {
   @UseGuards(JwtAuthGuard)
   create(@Body() body: createRoleDTO): Promise<Result> {
     return this.roleService.create(body);
+  }
+
+  @Put('update')
+  @ApiOperation({ summary: '编辑角色' })
+  @UseGuards(JwtAuthGuard)
+  update(@Body() body: updateRoleDTO): Promise<Result> {
+    return this.roleService.update(body);
+  }
+
+  @Delete('delete')
+  @ApiOperation({ summary: '删除角色' })
+  @UseGuards(JwtAuthGuard)
+  delete(@Body() body: deleteRoleDTO): Promise<Result> {
+    return this.roleService.delete(body);
   }
 
   @Put('associate/user')

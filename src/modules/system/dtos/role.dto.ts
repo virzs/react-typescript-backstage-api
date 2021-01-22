@@ -22,6 +22,34 @@ export class createRoleDTO {
   @MaxLength(30, { message: '角色名称不能超过30字' })
   remark: string;
 }
+export class updateRoleDTO {
+  @ApiProperty({ description: '角色id' })
+  @IsString()
+  @IsNotEmpty({ message: '角色id不能为空' })
+  @Expose()
+  roleId: string;
+
+  @ApiProperty({ description: '角色名称' })
+  @IsString()
+  @IsNotEmpty({ message: '角色名称不能为空' })
+  @Expose()
+  @MaxLength(30, { message: '角色名称不能超过30字' })
+  name: string;
+
+  @ApiProperty({ description: '角色名称' })
+  @IsString()
+  @IsNotEmpty({ message: '角色名称不能为空' })
+  @Expose()
+  @MaxLength(30, { message: '角色名称不能超过30字' })
+  remark: string;
+}
+export class deleteRoleDTO {
+  @ApiProperty({ description: '角色id' })
+  @IsString()
+  @IsNotEmpty({ message: '角色id不能为空' })
+  @Expose()
+  roleId: string;
+}
 
 export class associatedUserDTO {
   @ApiProperty({ description: '用户id' })
