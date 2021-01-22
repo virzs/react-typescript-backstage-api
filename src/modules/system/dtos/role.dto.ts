@@ -50,6 +50,13 @@ export class deleteRoleDTO {
   @Expose()
   roleId: string;
 }
+export class detailRoleDTO {
+  @ApiProperty({ description: '角色id' })
+  @IsString()
+  @IsNotEmpty({ message: '角色id不能为空' })
+  @Expose()
+  roleId: string;
+}
 
 export class associatedUserDTO {
   @ApiProperty({ description: '用户id' })

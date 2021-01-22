@@ -5,6 +5,7 @@ import {
   associatedUserPageRoleDTO,
   updateRoleDTO,
   deleteRoleDTO,
+  detailRoleDTO,
 } from './../dtos/role.dto';
 import { Result } from 'src/common/interface/result.interface';
 import JwtAuthGuard from 'src/modules/auth/guards/jwtAuth.guard';
@@ -46,6 +47,13 @@ export class RoleController {
     return this.roleService.delete(body);
   }
 
+  @Get('detail')
+  @ApiOperation({ summary: '获取角色详情' })
+  @UseGuards(JwtAuthGuard)
+  detail(@Query() query: detailRoleDTO): Promise<Result> {
+    return this.roleService.detail(query);
+  }
+
   @Put('associate/user')
   @ApiOperation({ description: '关联用户' })
   @UseGuards(JwtAuthGuard)
@@ -54,7 +62,7 @@ export class RoleController {
   }
 
   @Get('associate/user-page')
-  @ApiOperation({ summary: '角色分页' })
+  @ApiOperation({ summary: '角色关联的用户分页' })
   @UseGuards(JwtAuthGuard)
   associatedUserPage(
     @Query() query: associatedUserPageRoleDTO,

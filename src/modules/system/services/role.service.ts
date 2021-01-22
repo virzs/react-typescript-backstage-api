@@ -57,6 +57,13 @@ export class RoleService {
     return { code: 200, msg: '删除成功' };
   }
 
+  async detail(query) {
+    const { id } = query;
+    const result = this.roleRepository.findOne(id);
+    if (!result) throw new BadRequestException('获取失败');
+    return { code: 200, msg: '获取成功', data: result };
+  }
+
   //关联用户
   async associatedUser(body) {
     const { userId, roleId } = body;
