@@ -72,9 +72,10 @@ export class RoleService {
     const { current, size, ...params } = query;
     const pageData = await this.userRepository
       .createQueryBuilder('user')
+      .leftJoinAndSelect('user.role', 'role')
+      .where({ role: { id: params.roleId } })
       .skip((current - 1) * size)
       .take(size) // 取pageSize筆數
-      .setParameter('roleId', params.roleId)
       .getManyAndCount(); //返回总数
     const data = {
       reconds: pageData[0],
