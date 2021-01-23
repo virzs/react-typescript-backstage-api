@@ -17,6 +17,7 @@ export class MenuService {
     const parent = await this.menuRepository.findOne(parentId);
     if (!parent && parentId !== null)
       throw new BadRequestException('上级分类不存在');
+    body.parent = parent;
     const result = await this.menuRepository.save(body);
     if (!result) throw new BadRequestException('添加失败');
     return { code: 200, msg: '添加成功' };

@@ -57,6 +57,11 @@ export class createMenuDTO {
   @IsNotEmpty({ message: '菜单是否隐藏不能为空' })
   @Expose()
   readonly hidden: number;
+
+  @ApiProperty({ description: '上级id' })
+  @IsString()
+  @Expose()
+  readonly parentId?: string;
 }
 
 export class updateMenuDTO {
