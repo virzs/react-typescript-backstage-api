@@ -3,11 +3,13 @@ import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
+  Tree,
   TreeChildren,
   TreeParent,
 } from 'typeorm';
 
 @Entity('system_menu')
+@Tree('materialized-path')
 export class System_Menu extends CreateAndUpdateTimeEntity {
   @PrimaryGeneratedColumn('uuid')
   public id: string;

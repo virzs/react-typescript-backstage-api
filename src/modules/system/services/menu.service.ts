@@ -31,7 +31,7 @@ export class MenuService {
 
   async delete(body) {
     const { id } = body;
-    const detail = await this.menuTreeRepository.findOne(id);
+    const detail = await this.menuRepository.findOne(id);
     if (!detail) throw new BadRequestException('没有此菜单');
     const childrens = await this.menuTreeRepository.findDescendantsTree(detail);
     if (childrens && childrens.children)
