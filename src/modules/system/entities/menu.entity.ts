@@ -1,13 +1,17 @@
+import { System_Role } from './role.entity';
 import { CreateAndUpdateTimeEntity } from 'src/common/entities/createAndUpdateTime.entity';
 import {
   Column,
   Entity,
+  ManyToMany,
   PrimaryGeneratedColumn,
+  Tree,
   TreeChildren,
   TreeParent,
 } from 'typeorm';
 
 @Entity('system_menu')
+@Tree('materialized-path')
 export class System_Menu extends CreateAndUpdateTimeEntity {
   @PrimaryGeneratedColumn('uuid')
   public id: string;
@@ -45,4 +49,10 @@ export class System_Menu extends CreateAndUpdateTimeEntity {
 
   @TreeParent()
   public parent: System_Menu;
+
+  @ManyToMany(
+    () => System_Role,
+    role => role.menus,
+  )
+  roles: System_Role[];
 }

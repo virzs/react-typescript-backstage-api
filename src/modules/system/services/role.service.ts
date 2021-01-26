@@ -1,3 +1,4 @@
+import { System_Menu } from './../entities/menu.entity';
 import { User } from 'src/modules/user/entities/user.entity';
 import { System_Role } from './../entities/role.entity';
 import { Injectable, BadRequestException } from '@nestjs/common';
@@ -9,6 +10,8 @@ export class RoleService {
   constructor(
     @InjectRepository(System_Role)
     private readonly roleRepository: Repository<System_Role>,
+    @InjectRepository(System_Menu)
+    private readonly menuRepository: Repository<System_Menu>,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) {}
@@ -57,6 +60,13 @@ export class RoleService {
     return { code: 200, msg: '删除成功' };
   }
 
+  async detail(query) {
+    const { id } = query;
+    const result = this.roleRepository.findOne(id);
+    if (!result) throw new BadRequestException('获取失败');
+    return { code: 200, msg: '获取成功', data: result };
+  }
+
   //关联用户
   async associatedUser(body) {
     const { userId, roleId } = body;
@@ -85,7 +95,8 @@ export class RoleService {
     };
     return { code: 200, msg: '获取成功', data };
   }
-
+  //TODO 分离关联用户及关联菜单service
+  //角色分页
   async page(query) {
     const { current, size, ...params } = query;
     const pageData = await this.roleRepository

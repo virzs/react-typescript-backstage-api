@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 
 @Injectable()
-export class RabcGuard implements CanActivate {
+export class RolesGuard implements CanActivate {
   constructor(private readonly role: number) {}
   canActivate(
     context: ExecutionContext,

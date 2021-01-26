@@ -1,6 +1,14 @@
+import { System_Menu } from './menu.entity';
 import { CreateAndUpdateTimeEntity } from 'src/common/entities/createAndUpdateTime.entity';
 import { User } from 'src/modules/user/entities/user.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('system_role')
 export class System_Role extends CreateAndUpdateTimeEntity {
@@ -27,4 +35,11 @@ export class System_Role extends CreateAndUpdateTimeEntity {
     user => user.role,
   )
   user: User[];
+
+  @ManyToMany(
+    () => System_Menu,
+    menu => menu.roles,
+  )
+  @JoinTable()
+  menus: System_Menu[];
 }

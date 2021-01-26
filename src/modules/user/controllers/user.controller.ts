@@ -15,7 +15,6 @@ import { ApiCookieAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { PageDTO } from '../dtos/page.dto';
 import JwtAuthGuard from '../../auth/guards/jwtAuth.guard';
 import { UpdateDTO } from '../dtos/update.dto';
-import { RabcGuard } from 'src/common/guards/rbac.guard';
 
 @ApiTags('用户')
 @Controller('user')
@@ -39,7 +38,6 @@ export class UserController {
 
   @Put('update')
   @ApiOperation({ summary: '编辑用户信息' })
-  @UseGuards(new RabcGuard(0))
   @UseGuards(JwtAuthGuard)
   @ApiCookieAuth()
   update(@Body() body: UpdateDTO) {
