@@ -1,8 +1,7 @@
+import { RoleUserService } from './../services/roleUser.service';
 import {
   createRoleDTO,
   pageRoleDTO,
-  associatedUserDTO,
-  associatedUserPageRoleDTO,
   updateRoleDTO,
   deleteRoleDTO,
   detailRoleDTO,
@@ -25,7 +24,10 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 @ApiTags('角色管理')
 @Controller('system/role')
 export class RoleController {
-  constructor(private readonly roleService: RoleService) {}
+  constructor(
+    private readonly roleService: RoleService,
+    private readonly roleUserService: RoleUserService,
+  ) {}
   @Post('create')
   @ApiOperation({ summary: '新增角色' })
   @UseGuards(JwtAuthGuard)
@@ -52,22 +54,6 @@ export class RoleController {
   @UseGuards(JwtAuthGuard)
   detail(@Query() query: detailRoleDTO): Promise<Result> {
     return this.roleService.detail(query);
-  }
-
-  @Put('associate/user')
-  @ApiOperation({ description: '关联用户' })
-  @UseGuards(JwtAuthGuard)
-  associatedUser(@Body() body: associatedUserDTO): Promise<Result> {
-    return this.roleService.associatedUser(body);
-  }
-
-  @Get('associate/user-page')
-  @ApiOperation({ summary: '角色关联的用户分页' })
-  @UseGuards(JwtAuthGuard)
-  associatedUserPage(
-    @Query() query: associatedUserPageRoleDTO,
-  ): Promise<Result> {
-    return this.roleService.associatedUserPage(query);
   }
 
   @Get('page')
