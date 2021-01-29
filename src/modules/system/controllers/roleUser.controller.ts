@@ -1,7 +1,16 @@
+import { Result } from './../../../common/interface/result.interface';
 import { RoleUserService } from './../services/roleUser.service';
-import { Body, Controller, Get, Put, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Result } from 'src/common/interface/result.interface';
 import JwtAuthGuard from 'src/modules/auth/guards/jwtAuth.guard';
 import { associatedUserDTO, associatedUserPageRoleDTO } from '../dtos/role.dto';
 
@@ -10,11 +19,25 @@ import { associatedUserDTO, associatedUserPageRoleDTO } from '../dtos/role.dto';
 export class RoleUserController {
   constructor(private readonly roleUserService: RoleUserService) {}
 
-  @Put('create')
-  @ApiOperation({ description: '关联用户' })
+  @Post('create')
+  @ApiOperation({ description: '角色关联用户' })
   @UseGuards(JwtAuthGuard)
   associatedUser(@Body() body: associatedUserDTO): Promise<Result> {
     return this.roleUserService.associatedUser(body);
+  }
+
+  @Put('update')
+  @ApiOperation({ description: '更改用户关联角色' })
+  @UseGuards(JwtAuthGuard)
+  associatedChange(@Body() body): Promise<Result> {
+    return this.roleUserService.associatedChange(body);
+  }
+
+  @Delete('delete')
+  @ApiOperation({ description: '取消用户关联角色' })
+  @UseGuards(JwtAuthGuard)
+  associatedDelete(@Body() body): Promise<Result> {
+    return this.roleUserService.associatedDelete(body);
   }
 
   @Get('page')

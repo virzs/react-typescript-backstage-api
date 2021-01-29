@@ -24,6 +24,24 @@ export class RoleUserService {
     return { code: 200, msg: '关联角色成功' };
   }
 
+  //修改用户关联的角色
+  async associatedChange(body) {
+    const { userId, roleId } = body;
+    const role = await this.roleRepository.findOne(roleId);
+    if (!role) throw new BadRequestException('该角色不存在');
+    const result = this.userRepository.update(userId, { role: roleId });
+    if (!result) throw new BadRequestException('关联角色失败');
+    return { code: 200, msg: '更改关联角色成功' };
+  }
+
+  //取消角色关联
+  async associatedDelete(body) {
+    const { userId } = body;
+    const result = await this.userRepository.update(userId, { role: null });
+    if (!result) throw new BadRequestException('取消关联失败');
+    return { code: 200, msg: '取消关联成功' };
+  }
+
   //获取角色关联的用户分页
   async associatedUserPage(query) {
     const { current, size, ...params } = query;
