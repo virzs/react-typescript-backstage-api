@@ -2,8 +2,6 @@ import { RoleUserService } from './../services/roleUser.service';
 import {
   createRoleDTO,
   pageRoleDTO,
-  associatedUserDTO,
-  associatedUserPageRoleDTO,
   updateRoleDTO,
   deleteRoleDTO,
   detailRoleDTO,
@@ -63,21 +61,5 @@ export class RoleController {
   @UseGuards(JwtAuthGuard)
   page(@Query() query: pageRoleDTO): Promise<Result> {
     return this.roleService.page(query);
-  }
-
-  @Put('associate/user')
-  @ApiOperation({ description: '关联用户' })
-  @UseGuards(JwtAuthGuard)
-  associatedUser(@Body() body: associatedUserDTO): Promise<Result> {
-    return this.roleUserService.associatedUser(body);
-  }
-
-  @Get('associate/user-page')
-  @ApiOperation({ summary: '角色关联的用户分页' })
-  @UseGuards(JwtAuthGuard)
-  associatedUserPage(
-    @Query() query: associatedUserPageRoleDTO,
-  ): Promise<Result> {
-    return this.roleUserService.associatedUserPage(query);
   }
 }
