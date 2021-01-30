@@ -84,4 +84,11 @@ export class RoleService {
     };
     return { code: 200, msg: '获取成功', data };
   }
+
+  //角色列表
+  async list() {
+    const result = this.roleRepository.find();
+    if (!result) throw new BadRequestException('获取失败');
+    return { code: 200, msg: '获取成功', data: result };
+  }
 }
