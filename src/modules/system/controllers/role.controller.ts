@@ -62,4 +62,11 @@ export class RoleController {
   page(@Query() query: pageRoleDTO): Promise<Result> {
     return this.roleService.page(query);
   }
+
+  @Get('list')
+  @ApiOperation({ description: '角色列表' })
+  @UseGuards(JwtAuthGuard)
+  list(): Promise<Result> {
+    return this.roleService.list();
+  }
 }
