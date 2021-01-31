@@ -41,28 +41,28 @@ export class RoleService {
   }
 
   async create(body) {
-    const result = this.roleRepository.save(body);
+    const result = await this.roleRepository.save(body);
     if (!result) throw new BadRequestException('添加失败');
     return { code: 200, msg: '添加成功' };
   }
 
   async update(body) {
     const { id, ...update } = body;
-    const result = this.roleRepository.update(id, update);
+    const result = await this.roleRepository.update(id, update);
     if (!result) throw new BadRequestException('更新失败');
     return { code: 200, msg: '更新成功' };
   }
 
   async delete(body) {
-    const { id } = body;
-    const result = this.roleRepository.delete(id);
+    const { roleId } = body;
+    const result = await this.roleRepository.delete(roleId);
     if (!result) throw new BadRequestException('删除失败');
     return { code: 200, msg: '删除成功' };
   }
 
   async detail(query) {
-    const { id } = query;
-    const result = this.roleRepository.findOne(id);
+    const { roleId } = query;
+    const result = await this.roleRepository.findOne(roleId);
     if (!result) throw new BadRequestException('获取失败');
     return { code: 200, msg: '获取成功', data: result };
   }
@@ -87,7 +87,7 @@ export class RoleService {
 
   //角色列表
   async list() {
-    const result = this.roleRepository.find();
+    const result = await this.roleRepository.find();
     if (!result) throw new BadRequestException('获取失败');
     return { code: 200, msg: '获取成功', data: result };
   }

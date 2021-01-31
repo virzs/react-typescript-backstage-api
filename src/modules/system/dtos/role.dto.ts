@@ -25,7 +25,7 @@ export class createRoleDTO {
 export class updateRoleDTO {
   @ApiProperty({ description: '角色id' })
   @IsString()
-  @IsNotEmpty({ message: '角色id不能为空' })
+  @IsNotEmpty({ message: 'roleId不能为空' })
   @Expose()
   roleId: string;
 
@@ -46,14 +46,14 @@ export class updateRoleDTO {
 export class deleteRoleDTO {
   @ApiProperty({ description: '角色id' })
   @IsString()
-  @IsNotEmpty({ message: '角色id不能为空' })
+  @IsNotEmpty({ message: 'roleId不能为空' })
   @Expose()
   roleId: string;
 }
 export class detailRoleDTO {
   @ApiProperty({ description: '角色id' })
   @IsString()
-  @IsNotEmpty({ message: '角色id不能为空' })
+  @IsNotEmpty({ message: 'roleId不能为空' })
   @Expose()
   roleId: string;
 }
@@ -61,13 +61,13 @@ export class detailRoleDTO {
 export class associatedUserDTO {
   @ApiProperty({ description: '用户id' })
   @IsString()
-  @IsNotEmpty({ message: '用户id不能为空' })
+  @IsNotEmpty({ message: 'userId不能为空' })
   @Expose()
   userId: string;
 
   @ApiProperty({ description: '角色id' })
   @IsString()
-  @IsNotEmpty({ message: '角色id不能为空' })
+  @IsNotEmpty({ message: 'roleId不能为空' })
   @Expose()
   roleId: string;
 }
