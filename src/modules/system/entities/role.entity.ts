@@ -26,6 +26,7 @@ export class System_Role extends CreateAndUpdateTimeEntity {
   @Column({
     type: 'varchar',
     length: 100,
+    default: null,
     comment: '角色备注',
   })
   remark: string;
