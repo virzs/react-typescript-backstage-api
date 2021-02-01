@@ -54,15 +54,15 @@ export class RoleService {
   }
 
   async delete(body) {
-    const { roleId } = body;
-    const result = await this.roleRepository.delete(roleId);
+    const { id } = body;
+    const result = await this.roleRepository.delete(id);
     if (!result) throw new BadRequestException('删除失败');
     return { code: 200, msg: '删除成功' };
   }
 
   async detail(query) {
-    const { roleId } = query;
-    const result = await this.roleRepository.findOne(roleId);
+    const { id } = query;
+    const result = await this.roleRepository.findOne(id);
     if (!result) throw new BadRequestException('获取失败');
     return { code: 200, msg: '获取成功', data: result };
   }
