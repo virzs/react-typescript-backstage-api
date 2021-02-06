@@ -67,12 +67,24 @@ export class RoleService {
     return { code: 200, msg: '获取成功', data: result };
   }
 
+  async detailAndGetCount(query) {
+    const { id } = query;
+    const result = await this.roleRepository
+      .createQueryBuilder('role')
+      .leftJoinAndSelect('role.user', 'user')
+      .where({ id })
+      .getManyAndCount();
+    if (!result) throw new BadRequestException('查找失败');
+    return { code: 200, msg: '查找成功', data: result };
+  }
+
   //角色分页
   async page(query) {
     const { current, size, ...params } = query;
     const pageData = await this.roleRepository
       .createQueryBuilder('role')
       .where(params)
+      .orderBy('role.createTime', 'DESC')
       .skip((current - 1) * size)
       .take(size) // 取pageSize筆數
       .getManyAndCount(); //返回总数
@@ -87,7 +99,9 @@ export class RoleService {
 
   //角色列表
   async list() {
-    const result = await this.roleRepository.find();
+    const result = await this.roleRepository.find({
+      order: { createTime: 'DESC' },
+    });
     if (!result) throw new BadRequestException('获取失败');
     return { code: 200, msg: '获取成功', data: result };
   }
