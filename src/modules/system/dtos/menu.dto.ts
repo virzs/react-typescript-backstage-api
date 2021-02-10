@@ -22,6 +22,12 @@ export class createMenuDTO {
   @Expose()
   readonly alias: string;
 
+  @ApiProperty({ description: '菜单Icon' })
+  @IsString()
+  @IsOptional()
+  @Expose()
+  readonly icon: string;
+
   @ApiProperty({ description: '菜单路径' })
   @IsString()
   @MaxLength(100, { message: '菜单路径长度不能超过100字' })
@@ -79,6 +85,12 @@ export class updateMenuDTO {
   @MaxLength(30, { message: '菜单别名不能超过30字' })
   @Expose()
   readonly alias: string;
+
+  @ApiProperty({ description: '菜单Icon' })
+  @IsString()
+  @IsOptional()
+  @Expose()
+  readonly icon: string;
 
   @ApiProperty({ description: '菜单路径' })
   @IsString()
