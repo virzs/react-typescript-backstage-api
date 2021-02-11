@@ -26,17 +26,22 @@ export class System_Menu extends CreateAndUpdateTimeEntity {
   })
   public alias: string;
 
+  @Column({
+    type: 'varchar',
+    length: 30,
+    comment: '菜单图标',
+    default: null,
+  })
+  public icon: string;
+
   @Column({ type: 'varchar', length: 100, comment: '菜单路径' })
   public path: string;
 
-  @Column({ type: 'varchar', length: 100, comment: '备注' })
+  @Column({ type: 'varchar', length: 100, comment: '备注', default: null })
   public remark: string;
 
   @Column({ type: 'varchar', length: 30, comment: '菜单编号' })
   public code: string;
-
-  @Column({ type: 'int', comment: '菜单类型 1 菜单 2 按钮' })
-  public type: number;
 
   @Column({ type: 'int', comment: '排序', default: 0 })
   public sort: number;

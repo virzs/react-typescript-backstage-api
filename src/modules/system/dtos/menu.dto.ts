@@ -2,7 +2,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import {
   IsNotEmpty,
-  IsNumberString,
+  IsNumber,
+  IsOptional,
   IsString,
   MaxLength,
 } from 'class-validator';
@@ -20,6 +21,12 @@ export class createMenuDTO {
   @MaxLength(30, { message: '菜单别名不能超过30字' })
   @Expose()
   readonly alias: string;
+
+  @ApiProperty({ description: '菜单Icon' })
+  @IsString()
+  @IsOptional()
+  @Expose()
+  readonly icon: string;
 
   @ApiProperty({ description: '菜单路径' })
   @IsString()
@@ -40,26 +47,21 @@ export class createMenuDTO {
   @Expose()
   readonly code: number;
 
-  @ApiProperty({ description: '菜单类型' })
-  @IsNumberString()
-  @IsNotEmpty({ message: '菜单类型不能为空' })
-  @Expose()
-  readonly type: number;
-
   @ApiProperty({ description: '菜单排序' })
-  @IsNumberString()
+  @IsNumber()
   @IsNotEmpty({ message: '菜单排序不能为空' })
   @Expose()
   readonly sort: number;
 
   @ApiProperty({ description: '菜单是否隐藏' })
-  @IsNumberString()
+  @IsNumber()
   @IsNotEmpty({ message: '菜单是否隐藏不能为空' })
   @Expose()
   readonly hidden: number;
 
   @ApiProperty({ description: '上级id' })
   @IsString()
+  @IsOptional()
   @Expose()
   readonly parentId?: string;
 }
@@ -84,6 +86,12 @@ export class updateMenuDTO {
   @Expose()
   readonly alias: string;
 
+  @ApiProperty({ description: '菜单Icon' })
+  @IsString()
+  @IsOptional()
+  @Expose()
+  readonly icon: string;
+
   @ApiProperty({ description: '菜单路径' })
   @IsString()
   @MaxLength(100, { message: '菜单路径长度不能超过100字' })
@@ -103,20 +111,14 @@ export class updateMenuDTO {
   @Expose()
   readonly code: number;
 
-  @ApiProperty({ description: '菜单类型' })
-  @IsNumberString()
-  @IsNotEmpty({ message: '菜单类型不能为空' })
-  @Expose()
-  readonly type: number;
-
   @ApiProperty({ description: '菜单排序' })
-  @IsNumberString()
+  @IsNumber()
   @IsNotEmpty({ message: '菜单排序不能为空' })
   @Expose()
   readonly sort: number;
 
   @ApiProperty({ description: '菜单是否隐藏' })
-  @IsNumberString()
+  @IsNumber()
   @IsNotEmpty({ message: '菜单是否隐藏不能为空' })
   @Expose()
   readonly hidden: number;
